@@ -231,9 +231,8 @@ function init()
         return 
     end
     -- 廣過利大指距
-    local scene = ScutScene:new()
-    mScene = scene.root
-    scene:registerCallback(netCallback)
+    mScene = ScutScene:node()
+    mScene:registerCallback(netCallback)
     
     CCDirector:sharedDirector():pushScene(mScene)
     CCDirector:sharedDirector():RegisterBackHandler("MainScene.closeApp")
