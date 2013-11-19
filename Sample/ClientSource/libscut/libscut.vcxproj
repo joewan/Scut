@@ -41,10 +41,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;SCUT_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/scripting/lua/tolua;$(SolutionDir)/scripting/lua/cocos2dx_support;$(SolutionDir)/scripting/lua/lua;$(SolutionDir)/cocos2dx/platform/third_party/win32/zlib;$(SolutionDir)/cocos2dx/platform/third_party/win32/curl/;$(SolutionDir)/cocos2dx/;$(SolutionDir)/cocos2dx/include;$(ProjectDir)/ScutAnimation;$(ProjectDir)/ScutDataLogic;$(ProjectDir)/ScutUtility;$(ProjectDir)/ScutSystem;$(ProjectDir)/ScutNetwork</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;SCUT_WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/scripting/lua/tolua;$(SolutionDir)/scripting/lua/cocos2dx_support;$(SolutionDir)/scripting/lua/lua;$(SolutionDir)/cocos2dx/platform/third_party/win32/zlib;$(SolutionDir)/cocos2dx/platform/third_party/win32/OGLES;$(SolutionDir)/cocos2dx/platform/third_party/win32/curl/;$(SolutionDir)/cocos2dx/platform/win32/;$(SolutionDir)/cocos2dx/kazmath/include/;$(SolutionDir)/cocos2dx/platform/;$(SolutionDir)/cocos2dx/layers_scenes_transitions_nodes/;$(SolutionDir)/cocos2dx/;$(SolutionDir)/cocos2dx/include;$(ProjectDir)/ScutAnimation;$(ProjectDir)/ScutDataLogic;$(ProjectDir)/ScutUtility;$(ProjectDir)/ScutSystem;$(ProjectDir)/ScutNetwork</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -58,8 +58,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;SCUT_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/scripting/lua/tolua;$(SolutionDir)/scripting/lua/cocos2dx_support;$(SolutionDir)/scripting/lua/lua;$(SolutionDir)/cocos2dx/platform/third_party/win32/zlib;$(SolutionDir)/cocos2dx/platform/third_party/win32/curl/;$(SolutionDir)/cocos2dx/;$(SolutionDir)/cocos2dx/include;$(ProjectDir)/ScutAnimation;$(ProjectDir)/ScutDataLogic;$(ProjectDir)/ScutUtility;$(ProjectDir)/ScutSystem;$(ProjectDir)/ScutNetwork</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;SCUT_WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/scripting/lua/tolua;$(SolutionDir)/scripting/lua/cocos2dx_support;$(SolutionDir)/scripting/lua/lua;$(SolutionDir)/cocos2dx/platform/third_party/win32/zlib;$(SolutionDir)/cocos2dx/platform/third_party/win32/OGLES;$(SolutionDir)/cocos2dx/platform/third_party/win32/curl/;$(SolutionDir)/cocos2dx/platform/win32/;$(SolutionDir)/cocos2dx/kazmath/include/;$(SolutionDir)/cocos2dx/platform/;$(SolutionDir)/cocos2dx/layers_scenes_transitions_nodes/;$(SolutionDir)/cocos2dx/;$(SolutionDir)/cocos2dx/include;$(ProjectDir)/ScutAnimation;$(ProjectDir)/ScutDataLogic;$(ProjectDir)/ScutUtility;$(ProjectDir)/ScutSystem;$(ProjectDir)/ScutNetwork</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
