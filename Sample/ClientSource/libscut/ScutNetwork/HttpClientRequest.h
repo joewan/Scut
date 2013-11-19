@@ -38,9 +38,9 @@ namespace ScutNetwork
 	private:
 		CScutString		m_strUserAgent;
 		CScutString		m_strHttpProxyHost;
-		UINT			m_nHttpProxyPort;
+		unsigned int    m_nHttpProxyPort;
 		CScutString		m_strHttpsProxyHost;
-		UINT			m_nHttpsProxyPort;
+		unsigned int	m_nHttpsProxyPort;
 		bool			m_bUseProxy;
 		bool            m_bProxyNTLM;
 		bool			m_bProxyAuth;

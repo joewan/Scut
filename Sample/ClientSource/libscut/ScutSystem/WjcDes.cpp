@@ -5,7 +5,6 @@
 	This product is free for use.
 */
 //////////////////////////////////////////////////////////////////////////
-#include "stdafx.h"
 #include "memory.h"
 #include "WjcDes.h"
 

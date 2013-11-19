@@ -23,12 +23,13 @@ THE SOFTWARE.
 ****************************************************************************/
 
 
-#include "StdAfx.h"
 #include "LuaHost.h"
 #include "CCLuaEngine.h"
 #include "CCScene.h"
 #include "Cocos2dxLuaLoader.h"
 #include "tolua_fix.h"
+#include "Trace.h"
+
 using namespace ScutDataLogic;
 using namespace cocos2d;
 LuaHost::LuaHost(void)

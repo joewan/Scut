@@ -92,8 +92,6 @@
     <ClInclude Include="ScutDataLogic\NetHelper.h" />
     <ClInclude Include="ScutDataLogic\NetStreamExport.h" />
     <ClInclude Include="ScutDataLogic\PackageUnzipHandler.h" />
-    <ClInclude Include="ScutDataLogic\stdafx.h" />
-    <ClInclude Include="ScutDataLogic\targetver.h" />
     <ClInclude Include="ScutDataLogic\Utility.h" />
     <ClInclude Include="ScutDataLogic\XmlDataHandler.h" />
     <ClInclude Include="ScutDataLogic\zip_support\ioapi.h" />
@@ -106,8 +104,6 @@
     <ClInclude Include="ScutNetwork\INetStatusNotify.h" />
     <ClInclude Include="ScutNetwork\LuaHelper.h" />
     <ClInclude Include="ScutNetwork\NetClientBase.h" />
-    <ClInclude Include="ScutNetwork\stdafx.h" />
-    <ClInclude Include="ScutNetwork\targetver.h" />
     <ClInclude Include="ScutNetwork\TcpClient.h" />
     <ClInclude Include="ScutNetwork\TcpSceneManager.h" />
     <ClInclude Include="ScutSystem\AutoGuard.h" />
@@ -121,7 +117,6 @@
     <ClInclude Include="ScutSystem\ScutSMS.h" />
     <ClInclude Include="ScutSystem\ScutString.h" />
     <ClInclude Include="ScutSystem\ScutUtility.h" />
-    <ClInclude Include="ScutSystem\stdafx.h" />
     <ClInclude Include="ScutSystem\StdDES2.h" />
     <ClInclude Include="ScutSystem\StdString.h" />
     <ClInclude Include="ScutSystem\Stream.h" />
@@ -162,7 +157,6 @@
     <ClCompile Include="ScutDataLogic\NetHelper.cpp" />
     <ClCompile Include="ScutDataLogic\NetStreamExport.cpp" />
     <ClCompile Include="ScutDataLogic\PackageUnzipHandler.cpp" />
-    <ClCompile Include="ScutDataLogic\stdafx.cpp" />
     <ClCompile Include="ScutDataLogic\Utility.cpp" />
     <ClCompile Include="ScutDataLogic\XmlDataHandler.cpp" />
     <ClCompile Include="ScutDataLogic\zip_support\ioapi.cpp" />
@@ -176,7 +170,6 @@
     <ClCompile Include="ScutNetwork\LuaHelper.cpp" />
     <ClCompile Include="ScutNetwork\LUA_Export\LuaScutNetwork.cpp" />
     <ClCompile Include="ScutNetwork\NetClientBase.cpp" />
-    <ClCompile Include="ScutNetwork\stdafx.cpp" />
     <ClCompile Include="ScutNetwork\TcpClient.cpp" />
     <ClCompile Include="ScutNetwork\TcpSceneManager.cpp" />
     <ClCompile Include="ScutSystem\AutoGuard.cpp" />
@@ -189,7 +182,6 @@
     <ClCompile Include="ScutSystem\ScutSMS.cpp" />
     <ClCompile Include="ScutSystem\ScutString.cpp" />
     <ClCompile Include="ScutSystem\ScutUtility.cpp" />
-    <ClCompile Include="ScutSystem\stdafx.cpp" />
     <ClCompile Include="ScutSystem\StdDES2.cpp" />
     <ClCompile Include="ScutSystem\Stream.cpp" />
     <ClCompile Include="ScutSystem\tinyxml\tinystr.cpp" />

@@ -101,9 +101,6 @@
     <ClInclude Include="ScutSystem\ScutUtility.h">
       <Filter>ScutSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ScutSystem\stdafx.h">
-      <Filter>ScutSystem</Filter>
-    </ClInclude>
     <ClInclude Include="ScutSystem\StdDES2.h">
       <Filter>ScutSystem</Filter>
     </ClInclude>
@@ -176,12 +173,6 @@
     <ClInclude Include="ScutDataLogic\PackageUnzipHandler.h">
       <Filter>ScutDataLogic</Filter>
     </ClInclude>
-    <ClInclude Include="ScutDataLogic\stdafx.h">
-      <Filter>ScutDataLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="ScutDataLogic\targetver.h">
-      <Filter>ScutDataLogic</Filter>
-    </ClInclude>
     <ClInclude Include="ScutDataLogic\Utility.h">
       <Filter>ScutDataLogic</Filter>
     </ClInclude>
@@ -216,12 +207,6 @@
       <Filter>ScutNetwork</Filter>
     </ClInclude>
     <ClInclude Include="ScutNetwork\NetClientBase.h">
-      <Filter>ScutNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="ScutNetwork\stdafx.h">
-      <Filter>ScutNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="ScutNetwork\targetver.h">
       <Filter>ScutNetwork</Filter>
     </ClInclude>
     <ClInclude Include="ScutNetwork\TcpClient.h">
@@ -301,9 +286,6 @@
     <ClCompile Include="ScutSystem\ScutUtility.cpp">
       <Filter>ScutSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ScutSystem\stdafx.cpp">
-      <Filter>ScutSystem</Filter>
-    </ClCompile>
     <ClCompile Include="ScutSystem\StdDES2.cpp">
       <Filter>ScutSystem</Filter>
     </ClCompile>
@@ -376,9 +358,6 @@
     <ClCompile Include="ScutDataLogic\PackageUnzipHandler.cpp">
       <Filter>ScutDataLogic</Filter>
     </ClCompile>
-    <ClCompile Include="ScutDataLogic\stdafx.cpp">
-      <Filter>ScutDataLogic</Filter>
-    </ClCompile>
     <ClCompile Include="ScutDataLogic\Utility.cpp">
       <Filter>ScutDataLogic</Filter>
     </ClCompile>
@@ -416,9 +395,6 @@
       <Filter>ScutNetwork</Filter>
     </ClCompile>
     <ClCompile Include="ScutNetwork\NetClientBase.cpp">
-      <Filter>ScutNetwork</Filter>
-    </ClCompile>
-    <ClCompile Include="ScutNetwork\stdafx.cpp">
       <Filter>ScutNetwork</Filter>
     </ClCompile>
     <ClCompile Include="ScutNetwork\TcpClient.cpp">

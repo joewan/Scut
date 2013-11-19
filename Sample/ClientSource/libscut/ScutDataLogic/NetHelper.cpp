@@ -22,9 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-
-#include "StdAfx.h"
 #include "NetHelper.h"
+#include "Trace.h"
 #ifndef SCUT_WIN32
 #include <ctype.h>
 #endif
