@@ -56,9 +56,6 @@
     <ClInclude Include="ScutAnimation\SpriteFileStream.h">
       <Filter>ScutAnimation</Filter>
     </ClInclude>
-    <ClInclude Include="ScutUtility\IPAddress.h">
-      <Filter>ScutUtility</Filter>
-    </ClInclude>
     <ClInclude Include="ScutUtility\PlatformProcedure.h">
       <Filter>ScutUtility</Filter>
     </ClInclude>
@@ -261,9 +258,6 @@
     </ClCompile>
     <ClCompile Include="ScutAnimation\LUA_Export\LuaScutAnimation.cpp">
       <Filter>ScutAnimation</Filter>
-    </ClCompile>
-    <ClCompile Include="ScutUtility\IPAddress.c">
-      <Filter>ScutUtility</Filter>
     </ClCompile>
     <ClCompile Include="ScutUtility\PlatformProcedure.cpp">
       <Filter>ScutUtility</Filter>

@@ -19,13 +19,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -41,7 +41,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;SCUT_WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)/scripting/lua/tolua;$(SolutionDir)/scripting/lua/cocos2dx_support;$(SolutionDir)/scripting/lua/lua;$(SolutionDir)/cocos2dx/platform/third_party/win32/zlib;$(SolutionDir)/cocos2dx/platform/third_party/win32/OGLES;$(SolutionDir)/cocos2dx/platform/third_party/win32/curl/;$(SolutionDir)/cocos2dx/platform/win32/;$(SolutionDir)/cocos2dx/kazmath/include/;$(SolutionDir)/cocos2dx/platform/;$(SolutionDir)/cocos2dx/layers_scenes_transitions_nodes/;$(SolutionDir)/cocos2dx/;$(SolutionDir)/cocos2dx/include;$(ProjectDir)/ScutAnimation;$(ProjectDir)/ScutDataLogic;$(ProjectDir)/ScutUtility;$(ProjectDir)/ScutSystem;$(ProjectDir)/ScutNetwork</AdditionalIncludeDirectories>
@@ -133,7 +133,6 @@
     <ClInclude Include="ScutSystem\unzip.h" />
     <ClInclude Include="ScutSystem\WjcDes.h" />
     <ClInclude Include="ScutSystem\ZipUnZip.h" />
-    <ClInclude Include="ScutUtility\IPAddress.h" />
     <ClInclude Include="ScutUtility\PlatformProcedure.h" />
     <ClInclude Include="ScutUtility\ScutLanFactory.h" />
     <ClInclude Include="ScutUtility\ScutLocale.h" />
@@ -201,7 +200,6 @@
     <ClCompile Include="ScutSystem\unzip.cpp" />
     <ClCompile Include="ScutSystem\WjcDes.cpp" />
     <ClCompile Include="ScutSystem\ZipUnZip.cpp" />
-    <ClCompile Include="ScutUtility\IPAddress.c" />
     <ClCompile Include="ScutUtility\LUA_Export\LuaScutUtility.cpp" />
     <ClCompile Include="ScutUtility\PlatformProcedure.cpp" />
     <ClCompile Include="ScutUtility\ScutLanFactory.cpp" />

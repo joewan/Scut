@@ -11,6 +11,7 @@
 #endif
 
 #include "Defines.h"
+#include "StdString.h"
 
 enum LOGTYPE
 { 
