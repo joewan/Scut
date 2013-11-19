@@ -24,8 +24,7 @@ THE SOFTWARE.
 #include "stdafx.h"
 #include <string.h>
 #include "TcpClient.h"
-#include <curl/curl.h>
-//#include <curl/types.h>
+#include <curl.h>
 #include "INetStatusNotify.h"
 #include <vector>
 #include "TcpSceneManager.h"

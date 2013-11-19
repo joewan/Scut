@@ -28,8 +28,8 @@ THE SOFTWARE.
 #include "FileHelper.h"
 #include "ZipUtils.h"
 #include "Trace.h"
-#include "../ScutSystem/ScutUtility.h"
-#include "CCImage.h"
+#include "ScutUtility.h"
+#include "platform/CCImage.h"
 #include <vector>
 
 //#ifdef SCUT_ANDROID
