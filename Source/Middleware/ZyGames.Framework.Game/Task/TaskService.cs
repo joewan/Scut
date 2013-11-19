@@ -55,6 +55,9 @@ namespace ZyGames.Framework.Game.Task
         where T : ITaskItem
         where TC : TaskBaseConfig
     {
+		/// <summary>
+		/// The user identifier.
+		/// </summary>
         protected readonly int UserId;
         private PythonContext _taskContext;
         private bool _isUsedPy;
@@ -67,7 +70,10 @@ namespace ZyGames.Framework.Game.Task
             UserId = userId;
             _isUsedPy = InitTask();
         }
-
+		/// <summary>
+		/// Inits the task.
+		/// </summary>
+		/// <returns><c>true</c>, if task was inited, <c>false</c> otherwise.</returns>
         protected bool InitTask()
         {
             string path;

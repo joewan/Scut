@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 using System;
 using System.Collections.Generic;
+using ZyGames.Framework.Common;
 using ZyGames.Framework.Game.Configuration;
 using ZyGames.Framework.Game.Service;
 
@@ -36,35 +37,67 @@ namespace ZyGames.Framework.Game.Sns
         private const string defaultArgs = "Pid,Pwd,DeviceID";
         private HttpGet _httpGet;
         private string retailID = string.Empty;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.LoginProxy"/> class.
+		/// </summary>
+		/// <param name="httpGet">Http get.</param>
         public LoginProxy(HttpGet httpGet)
         {
             this._httpGet = httpGet;
             if (_httpGet != null)
             {
                 _httpGet.GetString("RetailID", ref retailID);
-            }  
+            }
         }
-
+		/// <summary>
+		/// Gets the login.
+		/// </summary>
+		/// <returns>The login.</returns>
         public ILogin GetLogin()
         {
-            LoginElement loginSection = ZyGameBaseConfigManager.GetLogin();
-            if (loginSection == null) return null;
-
-            RetailElement retail = loginSection.RetailList[retailID];
             object[] args = new object[0];
-            string typeName = string.Empty;
-            if (retail != null)
+            string typeName = string.Format("{0}.Sns.Login36you,{0}", "ZyGames.Framework.Game");
+
+            bool hasRetail = false;
+            if (ZyGameBaseConfigManager.GameSetting.HasSetting)
             {
-                typeName = retail.TypeName;
-                args = GetArgs(retail.Args);
+                var loginSetting = ZyGameBaseConfigManager.GameSetting.GetLoginSetting(retailID);
+                if(loginSetting!=null)
+                {
+                    typeName = loginSetting.TypeName.IndexOf(",") != -1
+                        ? loginSetting.TypeName
+                        : string.Format("{0}.Sns.{1},{0}", "ZyGames.Framework.Game", loginSetting.TypeName);
+                    args = GetArgs(loginSetting.TypeArgs);
+                    hasRetail = true;
+                }
             }
             else
             {
-                typeName = loginSection.DefaultTypeName;
+                var loginSection = ZyGameBaseConfigManager.GetLogin();
+                if (loginSection != null)
+                {
+                    var retail = loginSection.RetailList[retailID];
+                    if (retail != null)
+                    {
+                        typeName = retail.TypeName.IndexOf(",") != -1
+                            ? retail.TypeName
+                            : string.Format("{0}.Sns.{1},{0}", "ZyGames.Framework.Game", retail.TypeName);
+                        args = GetArgs(retail.Args);
+                        hasRetail = true;
+                    }
+                }
+            }
+            if (!hasRetail)
+            {
                 args = GetArgs(defaultArgs);
             }
-            return (ILogin)Activator.CreateInstance(Type.GetType(typeName), args);
+            
+            var type = Type.GetType(typeName, false, true);
+            if (type == null)
+            {
+                return null;
+            }
+            return type.CreateInstance<ILogin>(args);
         }
 
         private object[] GetArgs(string argsStr)
@@ -74,10 +107,10 @@ namespace ZyGames.Framework.Game.Sns
             foreach (string param in paramList)
             {
                 string paramVal = string.Empty;
-                if (_httpGet!=null)
+                if (_httpGet != null)
                 {
                     _httpGet.GetString(param, ref paramVal);
-                }                
+                }
                 args.Add(paramVal);
             }
             return args.ToArray();

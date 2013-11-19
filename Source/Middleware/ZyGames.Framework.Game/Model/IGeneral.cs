@@ -28,12 +28,25 @@ namespace ZyGames.Framework.Game.Model
     /// </summary>
     public interface IGeneral
     {
+		/// <summary>
+		/// Gets the general I.
+		/// </summary>
+		/// <value>The general I.</value>
         int GeneralID { get; }
-
+		/// <summary>
+		/// Gets or sets the life number.
+		/// </summary>
+		/// <value>The life number.</value>
         int LifeNum { get; set; }
-
+		/// <summary>
+		/// Gets or sets the position.
+		/// </summary>
+		/// <value>The position.</value>
         int Position { get; set; }
-
+		/// <summary>
+		/// Gets or sets the replace position.
+		/// </summary>
+		/// <value>The replace position.</value>
         int ReplacePosition { get; set; }
 
         /// <summary>

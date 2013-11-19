@@ -115,7 +115,11 @@ namespace ZyGames.Framework.Game.Com.Model
                 SetChange("Answer", value);
             }
         }
-
+		/// <summary>
+		/// 对象索引器属性
+		/// </summary>
+		/// <returns></returns>
+		/// <param name="index">Index.</param>
         protected override object this[string index]
         {
             get

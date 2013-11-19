@@ -27,9 +27,18 @@ using ZyGames.Framework.Common;
 
 namespace ZyGames.Framework.Game.Model
 {
+	/// <summary>
+	/// Embattle role.
+	/// </summary>
     public enum EmbattleRole
     {
+		/// <summary>
+		/// The role a.
+		/// </summary>
         RoleA,
+		/// <summary>
+		/// The role d.
+		/// </summary>
         RoleD
     }
     /// <summary>
@@ -37,6 +46,9 @@ namespace ZyGames.Framework.Game.Model
     /// </summary>
     public abstract class EmbattleQueue
     {
+		/// <summary>
+		/// The priority map list.
+		/// </summary>
         public static int[,] PriorityMapList = new[,]{
             {3, 6, 9, 2, 5, 8, 1, 4, 7},
             {1, 4, 7, 2, 5, 8, 3, 6, 9},
@@ -46,7 +58,11 @@ namespace ZyGames.Framework.Game.Model
         private readonly IGeneral[] _generalList = new IGeneral[9];
         private readonly Queue<int> _generalQueue = new Queue<int>();
         private readonly Queue<IGeneral> _waitQueue = new Queue<IGeneral>();
-
+		/// <summary>
+		/// Sets the queue.
+		/// </summary>
+		/// <param name="index">Index.</param>
+		/// <param name="general">General.</param>
         protected void SetQueue(int index, IGeneral general)
         {
             if (index < 0 || index > _generalList.Length - 1)
@@ -63,7 +79,10 @@ namespace ZyGames.Framework.Game.Model
             }
             GeneralCount++;
         }
-
+		/// <summary>
+		/// Gets the items.
+		/// </summary>
+		/// <value>The items.</value>
         public IGeneral[] Items
         {
             get
@@ -71,20 +90,29 @@ namespace ZyGames.Framework.Game.Model
                 return _generalList;
             }
         }
-
+		/// <summary>
+		/// Tos the queue.
+		/// </summary>
+		/// <returns>The queue.</returns>
         public int[] ToQueue()
         {
             int[] temp = new int[_generalQueue.Count];
             _generalQueue.CopyTo(temp, 0);
             return temp;
         }
-
+		/// <summary>
+		/// Gets or sets the role.
+		/// </summary>
+		/// <value>The role.</value>
         public EmbattleRole Role
         {
             get;
             set;
         }
-
+		/// <summary>
+		/// Gets a value indicating whether this instance is over.
+		/// </summary>
+		/// <value><c>true</c> if this instance is over; otherwise, <c>false</c>.</value>
         public bool IsOver
         {
             get;
@@ -98,7 +126,10 @@ namespace ZyGames.Framework.Game.Model
             get;
             set;
         }
-
+		/// <summary>
+		/// Gets or sets the general count.
+		/// </summary>
+		/// <value>The general count.</value>
         public int GeneralCount
         {
             get;
@@ -112,7 +143,10 @@ namespace ZyGames.Framework.Game.Model
             get;
             set;
         }
-
+		/// <summary>
+		/// Peeks the wait general.
+		/// </summary>
+		/// <returns>The wait general.</returns>
         public IGeneral PeekWaitGeneral()
         {
             if (_waitQueue.Count > 0)
@@ -342,7 +376,10 @@ namespace ZyGames.Framework.Game.Model
 
             return generalList.ToArray();
         }
-
+		/// <summary>
+		/// Finds all.
+		/// </summary>
+		/// <returns>The all.</returns>
         public virtual IGeneral[] FindAll()
         {
             return FindAll(false);

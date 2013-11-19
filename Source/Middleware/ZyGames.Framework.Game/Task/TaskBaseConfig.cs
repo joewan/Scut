@@ -34,11 +34,18 @@ namespace ZyGames.Framework.Game.Task
     /// </summary>
     public abstract class TaskBaseConfig : ShareEntity
     {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Task.TaskBaseConfig"/> class.
+		/// </summary>
         protected TaskBaseConfig()
             : base(AccessLevel.ReadOnly)
         {
 
         }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Task.TaskBaseConfig"/> class.
+		/// </summary>
+		/// <param name="taskID">Task I.</param>
         protected TaskBaseConfig(int taskID)
             : base(AccessLevel.ReadOnly)
         {

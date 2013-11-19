@@ -41,6 +41,10 @@ namespace ZyGames.Framework.Game.Pay.Section
         //    get { return (ChannelUCCollection)this[""]; }
         //}
 
+		/// <summary>
+		/// Gets the rates.
+		/// </summary>
+		/// <value>The rates.</value>
         [ConfigurationProperty("", IsDefaultCollection = true)]
         public AppStorePayCollection Rates
         {

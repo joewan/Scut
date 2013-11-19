@@ -47,7 +47,7 @@ namespace ZyGames.Framework.Game.Com.Rank
         {
             _cacheListener = new CacheListener(CacheKey, secondTimeOut, (key, value, reason) =>
             {
-                if (reason == CacheItemRemovedReason.Expired)
+				if (reason == CacheRemovedReason.Expired)
                 {
                     if (_running == 0)
                     {

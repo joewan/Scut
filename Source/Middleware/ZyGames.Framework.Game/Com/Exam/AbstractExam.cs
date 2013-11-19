@@ -32,6 +32,9 @@ namespace ZyGames.Framework.Game.Com.Exam
     /// </summary>
     public abstract class AbstractExam<T> where T : QuestionData, new()
     {
+		/// <summary>
+		/// The user identifier.
+		/// </summary>
         protected readonly int UserId;
         
         /// <summary>

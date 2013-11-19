@@ -30,7 +30,18 @@ namespace ZyGames.Framework.Game.Pay
     internal class ConfigManger
     {
         private static string _connectionString = string.Empty;
+
+        /// <summary>
+        /// 连接的数据驱动提供类型，MSSQL,MYSQL
+        /// </summary>
+        public static string ConnectionProviderType
+        {
+            get { return ConfigUtils.GetSetting("PayDB_ProviderType"); }
+        }
         
+        /// <summary>
+        /// 
+        /// </summary>
         public static string connectionString
         {
             get

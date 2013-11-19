@@ -28,9 +28,12 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Web;
 using System.Web.Security;
+using ZyGames.Framework.Common;
 using ZyGames.Framework.Common.Configuration;
 using ZyGames.Framework.Common.Log;
 using ZyGames.Framework.Game.Lang;
+using ZyGames.Framework.Game.Runtime;
+using HttpRequest = System.Web.HttpRequest;
 
 namespace ZyGames.Framework.Game.Service
 {
@@ -40,17 +43,16 @@ namespace ZyGames.Framework.Game.Service
     /// </summary>
     public class HttpGet
     {
-        private static string SignKey = ConfigUtils.GetSetting("Product.SignKey");
         private string _requestParam = string.Empty;
         private StringBuilder _error = new StringBuilder();
-        private Dictionary<string, string> _param;
+        private Dictionary<string, string> _param = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public HttpGet(HttpRequest request)
         {
-            _paramString = request["d"];
+            _paramString = request["d"] ?? "";
             InitData(_paramString);
         }
 
@@ -60,23 +62,27 @@ namespace ZyGames.Framework.Game.Service
         /// <param name="param">自定义参数字串</param>
         /// <param name="sessionId"></param>
         /// <param name="remoteAddress"></param>
-        public HttpGet(string param, string sessionId, string remoteAddress)
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        public HttpGet(string param, string sessionId, string remoteAddress, Action<object, int> callback = null, object state = null)
         {
-            _paramString = param;
+            _paramString = param ?? "";
             _sessionId = sessionId;
-            RemoteAddress = remoteAddress;
+            _remoteAddress = remoteAddress;
+            Callback = callback;
+            _state = state;
             InitData(_paramString);
         }
 
-
-        public HttpGet(Dictionary<string, string> param, string sessionId, string remoteAddress, Action<object, int> callback, object state)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string this[string key]
         {
-            _param = param;
-            _requestParam = _param.ContainsKey("sign") ? _param["sign"] : "";
-            _sessionId = sessionId;
-            RemoteAddress = remoteAddress;
-            Callback = callback;
-            _state = state;
+            get { return _param[key]; }
+            set { _param[key] = value; }
         }
 
         /// <summary>
@@ -86,18 +92,37 @@ namespace ZyGames.Framework.Game.Service
 
         private readonly object _state;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
         public void LoginSuccessCallback(int userId)
         {
-            if(Callback!=null)
+            if (Callback != null)
             {
                 Callback(_state, userId);
             }
         }
 
+        private int _actionId;
+
+        /// <summary>
+        /// Action编号
+        /// </summary>
+        public int ActionId
+        {
+            get { return _actionId; }
+        }
+
+        private string _remoteAddress;
+
         /// <summary>
         /// 
         /// </summary>
-        public string RemoteAddress { get; private set; }
+        public string RemoteAddress
+        {
+            get { return _remoteAddress; }
+        }
 
         private string _sessionId;
 
@@ -132,6 +157,11 @@ namespace ZyGames.Framework.Game.Service
             {
                 _param[key] = temp[key];
             }
+            if (string.IsNullOrEmpty(_sessionId))
+            {
+                _sessionId = _param.ContainsKey("sid") ? _param["sid"] : "";
+            }
+            _actionId = (_param.ContainsKey("actionId") ? _param["actionId"] : "0").ToInt();
         }
 
         private const int ZeroNum = 0;
@@ -535,27 +565,27 @@ namespace ZyGames.Framework.Game.Service
         /// <returns></returns>
         public bool CheckSign()
         {
-            if (string.IsNullOrEmpty(SignKey))
+            string signKey = GameEnvironment.ProductSignKey;
+            if (string.IsNullOrEmpty(signKey))
             {
                 return true;
             }
-            return true;
 
-            //string sign = "";
-            //if (GetString("sign", ref sign))
-            //{
-            //    if (_requestParam != null)
-            //    {
-            //        string attachParam = _requestParam + SignKey;
-            //        string key = FormsAuthentication.HashPasswordForStoringInConfigFile(attachParam, "MD5");
-            //        if (!string.IsNullOrEmpty(key) && key.ToLower() == sign)
-            //        {
-            //            return true;
-            //        }
-            //    }
-            //}
+            string sign = "";
+            if (GetString("sign", ref sign))
+            {
+                if (_requestParam != null)
+                {
+                    string attachParam = _requestParam + signKey;
+                    string key = FormsAuthentication.HashPasswordForStoringInConfigFile(attachParam, "MD5");
+                    if (!string.IsNullOrEmpty(key) && key.ToLower() == sign)
+                    {
+                        return true;
+                    }
+                }
+            }
 
-            //return false;
+            return false;
         }
 
 

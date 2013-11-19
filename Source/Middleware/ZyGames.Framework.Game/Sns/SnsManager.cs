@@ -28,6 +28,9 @@ using ZyGames.Framework.Game.Runtime;
 
 namespace ZyGames.Framework.Game.Sns
 {
+    /// <summary>
+    /// 用户中心登录管理类
+    /// </summary>
     public class SnsManager
     {
         /// <summary>

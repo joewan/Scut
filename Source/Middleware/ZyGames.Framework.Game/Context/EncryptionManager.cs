@@ -31,22 +31,30 @@ using System.Security.Cryptography;
 
 namespace ZyGames.Framework.Game.Context
 {
+	/// <summary>
+	/// Encryption manager.
+	/// </summary>
     public class EncryptionManager
     {
         private static SymmetricAlgorithm mobjCryptoService;
-        private static string Key;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Context.EncryptionManager"/> class.
+		/// </summary>
         public EncryptionManager()
         {
             mobjCryptoService = new RijndaelManaged();
         }
        
-       
+       /// <summary>
+       /// HMACSHs the a1 encrypt.
+       /// </summary>
+       /// <returns>The a1 encrypt.</returns>
+       /// <param name="EncryptText">Encrypt text.</param>
+       /// <param name="EncryptKey">Encrypt key.</param>
         public static string HMACSHA1Encrypt(string EncryptText, string EncryptKey)
         {
             HMACSHA1 myHMACSHA1 = new HMACSHA1(Encoding.UTF8.GetBytes(EncryptKey));
             byte[] RstRes = myHMACSHA1.ComputeHash(Encoding.UTF8.GetBytes(EncryptText));
-            //CryptoStream CStream = new CryptoStream(Stream.Null, myHMACSHA1, CryptoStreamMode.Write);
-            //CStream.Write(RstRes, 0, RstRes.Length);  
             StringBuilder EnText = new StringBuilder();
             foreach (byte Byte in RstRes)
             {
@@ -67,12 +75,12 @@ namespace ZyGames.Framework.Game.Context
             return FormsAuthentication.HashPasswordForStoringInConfigFile(source, "MD5"); ;
         }
 
-
-
-        //MD5不可逆加密 
-
-        //32位加密 
-
+		/// <summary>
+		/// Gets the M d5_32.
+		/// </summary>
+		/// <returns>The M d5_32.</returns>
+		/// <param name="s">S.</param>
+		/// <param name="_input_charset">_input_charset.</param>
         public static string GetMD5_32(string s, string _input_charset)
         {
             MD5 md5 = new MD5CryptoServiceProvider();
@@ -94,7 +102,7 @@ namespace ZyGames.Framework.Game.Context
         /// <returns>密钥</returns>    
         private static byte[] GetLegalKey()
         {
-            string sTemp = Key;
+            string sTemp = "";
             mobjCryptoService.GenerateKey();
             byte[] bytTemp = mobjCryptoService.Key;
             int KeyLength = bytTemp.Length;
@@ -123,7 +131,8 @@ namespace ZyGames.Framework.Game.Context
         /// <summary>    
         /// 加密方法    
         /// </summary>    
-        /// <param name="Source">待加密的串</param>    
+		/// <param name="Source">待加密的串</param>    
+		/// <param name="key">待加密的Key</param>    
         /// <returns>经过加密的串</returns>    
         public static string Encrypto(string Source, string key)
         {
@@ -142,7 +151,8 @@ namespace ZyGames.Framework.Game.Context
         /// <summary>    
         /// 解密方法    
         /// </summary>    
-        /// <param name="Source">待解密的串</param>    
+		/// <param name="Source">待解密的串</param>    
+		/// <param name="key">待加密的Key</param>    
         /// <returns>经过解密的串</returns>    
         public static string Decrypto(string Source, string key)
         {

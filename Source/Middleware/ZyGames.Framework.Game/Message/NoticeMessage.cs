@@ -48,7 +48,7 @@ namespace ZyGames.Framework.Game.Message
         /// <param name="noticeType"></param>
         /// <param name="versionId"></param>
         public NoticeMessage(NoticeType noticeType, int versionId)
-            :base(AccessLevel.ReadWrite)
+            :base(false)
         {
             _id = Guid.NewGuid();
             _noticeType = noticeType;
@@ -142,11 +142,30 @@ namespace ZyGames.Framework.Game.Message
             set { _sendDate = value; }
         }
 
+        /// <summary>
+        /// 播放次数
+        /// </summary>
+        [ProtoMember(1009)]
+        public int PlayTimes { get; set; }
+
+        /// <summary>
+        /// 目标扩展ID
+        /// </summary>
+        [ProtoMember(1010)]
+        public object TargetId { get; set; }
+		/// <summary>
+		/// Gets the identity identifier.
+		/// </summary>
+		/// <returns>The identity identifier.</returns>
         protected override int GetIdentityId()
         {
             return DefIdentityId;
         }
-
+		/// <summary>
+		/// 对象索引器属性
+		/// </summary>
+		/// <returns></returns>
+		/// <param name="index">Index.</param>
         protected override object this[string index]
         {
             get { throw new NotImplementedException(); }

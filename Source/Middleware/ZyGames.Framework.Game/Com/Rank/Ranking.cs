@@ -61,11 +61,19 @@ namespace ZyGames.Framework.Game.Com.Rank
         private readonly int _intervalTimes;
         private List<T> _list;
         private int _rankCount;
-
+		/// <summary>
+		/// Initializes a new instance of the class.
+		/// </summary>
+		/// <param name="key">Key.</param>
         protected Ranking(string key)
             : this(key, 0, 0)
         {
         }
+		/// <summary>
+		/// Initializes a new instance of the class.
+		/// </summary>
+		/// <param name="key">Key.</param>
+		/// <param name="top">Top.</param>
         protected Ranking(string key, int top)
             : this(key, top, 0)
         {

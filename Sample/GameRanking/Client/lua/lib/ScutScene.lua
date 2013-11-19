@@ -1,15 +1,16 @@
 ScutScene = {}
-ScutScene.__index = ScutScene
+g_scenes = {}
 
-function ScutScene:node()
-    scene = CCScene:create()
-    local t = tolua.getpeer(scene)
-    if not t then
-        t = {}
-        tolua.setpeer(scene, t)
+function ScutScene:new(o)
+    o = o or {}
+    if o.root == nil then
+        o.root = CCScene:create()
+        print(o.root)
     end
-    setmetatable(t, ScutScene)
-    return scene
+    setmetatable(o, self)
+    self.__index = self
+    g_scenes[o.root] = o
+    return o
 end
 
 function ScutScene:registerScriptHandler(func)
@@ -41,14 +42,14 @@ function ScutScene:execCallback(nTag, nNetState, pData)
         local bValue = reader:LuaHandlePushDataWithInt(pData)
         if not bValue then return end
         if self.mCallbackFunc then
-            self.mCallbackFunc(self)
+            self.mCallbackFunc(self.root)
         end
 
         if self.mNetCommonDataFunc then
             self.mNetCommonDataFunc()
         end
 
-        netDecodeEnd(self, nTag)
+        netDecodeEnd(self.root, nTag)
 
         if self.mNetErrorFunc then
             self.mNetErrorFunc()

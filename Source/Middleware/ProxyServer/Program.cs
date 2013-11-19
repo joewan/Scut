@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NLog;
 
 namespace ProxyServer
 {
@@ -32,10 +33,18 @@ namespace ProxyServer
     {
         static void Main(string[] args)
         {
-            var server = new GameProxy();
-
-            Console.WriteLine("按任意键退出...");
-            Console.ReadLine();
+            Logger Logger = LogManager.GetLogger("ProxyServer");
+            try
+            {
+                var g = GameServerListManager.Current;
+                var server = new GameProxy();
+				Console.WriteLine("Press Enter to exit...");
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+			{
+                Logger.Error("{0} error:{1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), ex);
+            }
         }
     }
 }

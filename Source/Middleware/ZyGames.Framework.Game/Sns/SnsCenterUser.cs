@@ -33,6 +33,9 @@ using ZyGames.Framework.Game.Runtime;
 
 namespace ZyGames.Framework.Game.Sns
 {
+	/// <summary>
+	/// Reg type.
+	/// </summary>
     public enum RegType
     {
         /// <summary>
@@ -43,12 +46,23 @@ namespace ZyGames.Framework.Game.Sns
         /// 游客通过设备ID登录
         /// </summary>
         Guest,
+		/// <summary>
+		/// The other.
+		/// </summary>
         Other
     }
-
+	/// <summary>
+	/// Pwd type.
+	/// </summary>
     public enum PwdType
     {
+		/// <summary>
+		/// The DE.
+		/// </summary>
         DES = 0,
+		/// <summary>
+		/// The M d5.
+		/// </summary>
         MD5
     }
 
@@ -57,6 +71,11 @@ namespace ZyGames.Framework.Game.Sns
     /// </summary>
     public class SnsCenterUser
     {
+		/// <summary>
+		/// Passwords the encrypt md5.
+		/// </summary>
+		/// <returns>The encrypt md5.</returns>
+		/// <param name="str">String.</param>
         public static string PasswordEncryptMd5(string str)
         {
             return CryptoHelper.RegUser_MD5_Pwd(str);
@@ -78,39 +97,61 @@ namespace ZyGames.Framework.Game.Sns
         private string _deviceID = String.Empty;
         private BaseLog _Logger = new BaseLog();
 
+		/// <summary>
+		/// Gets the passport identifier.
+		/// </summary>
+		/// <value>The passport identifier.</value>
         public string PassportId
         {
             get { return _PassportId; }
         }
-
+		/// <summary>
+		/// Gets the password.
+		/// </summary>
+		/// <value>The password.</value>
         public string Password
         {
             get { return _PassportPwd; }
         }
-
+		/// <summary>
+		/// Gets or sets the retail I.
+		/// </summary>
+		/// <value>The retail I.</value>
         public string RetailID
         {
             get;
             set;
         }
-
+		/// <summary>
+		/// Gets or sets the weixin code.
+		/// </summary>
+		/// <value>The weixin code.</value>
         public string WeixinCode
         {
             get;
             set;
         }
+		/// <summary>
+		/// Gets or sets the retail user.
+		/// </summary>
+		/// <value>The retail user.</value>
         public string RetailUser
         {
             get;
             set;
         }
-
+		/// <summary>
+		/// Gets or sets the type of the reg.
+		/// </summary>
+		/// <value>The type of the reg.</value>
         public RegType RegType
         {
             get;
             set;
         }
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.SnsCenterUser"/> class.
+		/// </summary>
         public SnsCenterUser()
         {
             RegType = RegType.Other;
@@ -246,7 +287,10 @@ namespace ZyGames.Framework.Game.Sns
             }
             return false;
         }
-
+		/// <summary>
+		/// Determines whether this instance is exist retail.
+		/// </summary>
+		/// <returns><c>true</c> if this instance is exist retail; otherwise, <c>false</c>.</returns>
         public bool IsExistRetail()
         {
             string sGetSql = "select top 1 userid from SnsUserInfo where RetailID=@RetailID and RetailUser=@RetailUser";
@@ -269,7 +313,12 @@ namespace ZyGames.Framework.Game.Sns
             return false;
         }
 
-
+		/// <summary>
+		/// Sets the type of the login.
+		/// </summary>
+		/// <param name="regType">Reg type.</param>
+		/// <param name="pwdType">Pwd type.</param>
+		/// <param name="passportId">Passport identifier.</param>
         public static void SetLoginType(ref RegType regType, ref PwdType pwdType, string passportId)
         {
             string sGetSql = "select top 1 RegType,DeviceID,PwdType from SnsUserInfo where PassportId=@aPassportId";
@@ -328,7 +377,12 @@ namespace ZyGames.Framework.Game.Sns
             }
             return null;
         }
-
+		/// <summary>
+		/// Inserts the sns user.
+		/// </summary>
+		/// <returns>The sns user.</returns>
+		/// <param name="paramNames">Parameter names.</param>
+		/// <param name="paramValues">Parameter values.</param>
         public int InsertSnsUser(string[] paramNames, string[] paramValues)
         {
             SnsPassport oSnsPassportLog = new SnsPassport();
@@ -430,6 +484,11 @@ namespace ZyGames.Framework.Game.Sns
                 return 0;
             }
         }
+		/// <summary>
+		/// Gets the password.
+		/// </summary>
+		/// <returns>The password.</returns>
+		/// <param name="passportId">Passport identifier.</param>
         public string GetPassword(string passportId)
         {
             string sGetSql = "select top 1 PassportPwd from SnsUserInfo where PassportId=@PassportId";
@@ -577,7 +636,11 @@ namespace ZyGames.Framework.Game.Sns
             return result;
         }
 
-
+		/// <summary>
+		/// Adds the login log.
+		/// </summary>
+		/// <param name="deviceID">Device I.</param>
+		/// <param name="PassportID">Passport I.</param>
         public static void AddLoginLog(string deviceID, string PassportID)
         {
             if (string.IsNullOrEmpty(deviceID) || string.IsNullOrEmpty(PassportID))

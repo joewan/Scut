@@ -29,19 +29,33 @@ using System.Text;
 
 namespace ZyGames.Framework.Game.Pay.Section
 {
+	/// <summary>
+	/// App store pay collection.
+	/// </summary>
     [ConfigurationCollection(typeof(AppStorePayElement), AddItemName = "rate")]
     public class AppStorePayCollection : ConfigurationElementCollection
     {
+		/// <summary>
+		/// Creates the new element.
+		/// </summary>
+		/// <returns>The new element.</returns>
         protected override ConfigurationElement CreateNewElement()
         {
             return new AppStorePayElement();
         }
-
+		/// <summary>
+		/// Gets the element key.
+		/// </summary>
+		/// <returns>The element key.</returns>
+		/// <param name="element">Element.</param>
         protected override object GetElementKey(ConfigurationElement element)
         {
             return ((AppStorePayElement)element).ProductId;
         }
-
+		/// <summary>
+		/// Gets the <see cref="ZyGames.Framework.Game.Pay.Section.AppStorePayCollection"/> at the specified index.
+		/// </summary>
+		/// <param name="index">Index.</param>
         public AppStorePayElement this[int index]
         {
             get
@@ -49,7 +63,10 @@ namespace ZyGames.Framework.Game.Pay.Section
                 return (AppStorePayElement)base.BaseGet(index);
             }
         }
-
+		/// <summary>
+		/// Gets the <see cref="ZyGames.Framework.Game.Pay.Section.AppStorePayCollection"/> with the specified key.
+		/// </summary>
+		/// <param name="key">Key.</param>
         public new AppStorePayElement this[string key]
         {
             get

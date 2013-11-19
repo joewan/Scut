@@ -32,49 +32,25 @@ namespace ZyGames.Framework.Game.Sns
     /// <summary>
     /// 36you官网登录0000
     /// </summary>
-    public class Login36you : ILogin
+    public class Login36you : AbstractLogin
     {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.Login36you"/> class.
+		/// </summary>
+		/// <param name="passportID">Passport I.</param>
+		/// <param name="password">Password.</param>
+		/// <param name="deviceID">Device I.</param>
         public Login36you(string passportID, string password, string deviceID)
         {
             this.PassportID = passportID;
             this.DeviceID = deviceID;
             Password = password;
         }
-
-        public string UserID
-        {
-            get;
-            set;
-        }
-
-        public string PassportID
-        {
-            get;
-            set;
-        }
-
-
-        public string Password
-        {
-            get;
-            set;
-        }
-
-        public string DeviceID
-        {
-            get;
-            set;
-        }
-
-        public string SessionID
-        {
-            get;
-            set;
-        }
-
-        #region ILogin 成员
-
-        public string GetRegPassport()
+		/// <summary>
+		/// 注册通行证
+		/// </summary>
+		/// <returns></returns>
+        public override string GetRegPassport()
         {
             string[] userList = SnsManager.GetRegPassport(DeviceID);
             if (userList.Length == 2)
@@ -84,47 +60,36 @@ namespace ZyGames.Framework.Game.Sns
             }
             return PassportID;
         }
-
-        public bool CheckLogin()
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+        public override bool CheckLogin()
         {
+            string pwd = Password;
             try
             {
-                string pwd = Password;
                 pwd = new DESAlgorithmNew().DecodePwd(pwd, GameEnvironment.ClientDesDeKey);
-                pwd = CryptoHelper.DES_Encrypt(pwd, GameEnvironment.ProductDesEnKey);
-                Password = pwd;
             }
             catch (Exception ex)
             {
                 TraceLog.WriteError("Decode pwd error:{0}", ex);
             }
+            pwd = CryptoHelper.DES_Encrypt(pwd, GameEnvironment.ProductDesEnKey);
+            Password = pwd;
             //快速登录
             UserID = SnsManager.LoginByDevice(PassportID, Password, DeviceID).ToString();
 
             if (!string.IsNullOrEmpty(UserID) && UserID != "0")
             {
-                SessionID = GetSessionId();
+                if (string.IsNullOrEmpty(SessionID))
+                {
+                    SessionID = GetSessionId();
+                }
                 return true;
             }
             TraceLog.WriteError("LoginByDevice pid:{0},pwd:{1},device:{2},uid:{3}", PassportID, Password, DeviceID, UserID);
             return false;
-        }
-
-        #endregion
-
-
-        protected static string GetSessionId()
-        {
-            string sessionId = string.Empty;
-            if (HttpContext.Current != null && HttpContext.Current.Session != null)
-            {
-                sessionId = HttpContext.Current.Session.SessionID;
-            }
-            else
-            {
-                sessionId = System.Guid.NewGuid().ToString().Replace("-", string.Empty);
-            }
-            return sessionId;
         }
 
     }

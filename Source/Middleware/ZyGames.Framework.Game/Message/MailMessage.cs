@@ -272,7 +272,11 @@ namespace ZyGames.Framework.Game.Message
                 SetChange("RemoveDate", value);
             }
         }
-
+		/// <summary>
+		/// 对象索引器属性
+		/// </summary>
+		/// <returns></returns>
+		/// <param name="index">Index.</param>
         protected override object this[string index]
         {
             get
@@ -348,7 +352,10 @@ namespace ZyGames.Framework.Game.Message
         }
 
         #endregion
-
+		/// <summary>
+		/// Gets the identity identifier.
+		/// </summary>
+		/// <returns>The identity identifier.</returns>
         protected override int GetIdentityId()
         {
             return UserId;

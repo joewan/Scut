@@ -99,9 +99,6 @@ namespace ZyGames.Framework.Game.Pay
                 }
                 return olist;
             }
-
-
-            return null;
         }
 
         /// <summary>

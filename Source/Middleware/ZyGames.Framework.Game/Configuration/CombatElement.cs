@@ -30,6 +30,10 @@ namespace ZyGames.Framework.Game.Configuration
     /// </summary>
     public class CombatElement : ConfigurationElement
     {
+		/// <summary>
+		/// Gets or sets the name of the type.
+		/// </summary>
+		/// <value>The name of the type.</value>
         [ConfigurationProperty("type", IsRequired = true)]
         public string TypeName
         {

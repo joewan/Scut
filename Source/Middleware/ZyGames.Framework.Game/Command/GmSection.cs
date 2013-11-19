@@ -25,8 +25,15 @@ using System.Configuration;
 
 namespace ZyGames.Framework.Game.Command
 {
+	/// <summary>
+	/// Gm section.
+	/// </summary>
     public class GmSection : ConfigurationSection
     {
+		/// <summary>
+		/// Gets or sets the command.
+		/// </summary>
+		/// <value>The command.</value>
         [ConfigurationProperty("command", IsRequired = true)]
         public CommandCollection Command
         {

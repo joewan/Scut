@@ -31,36 +31,55 @@ using ZyGames.Framework.Game.Service;
 
 namespace ZyGames.Framework.Game.Pay.Section
 {
+	/// <summary>
+	/// App store pay element.
+	/// </summary>
     public class AppStorePayElement : ConfigurationElement
     {
+		/// <summary>
+		/// Gets or sets the product identifier.
+		/// </summary>
+		/// <value>The product identifier.</value>
         [ConfigurationProperty("productId", IsRequired = true, IsKey = true)]
         public string ProductId
         {
             get { return this["productId"] as string; }
             set { this["productId"] = value; }
         }
-
+		/// <summary>
+		/// Gets or sets the type of the mobile.
+		/// </summary>
+		/// <value>The type of the mobile.</value>
         [ConfigurationProperty("mobileType")]
         public MobileType MobileType
         {
             get { return this["mobileType"].ToEnum<MobileType>(); }
             set { this["mobileType"] = value; }
         }
-
+		/// <summary>
+		/// Gets or sets the dollar.
+		/// </summary>
+		/// <value>The dollar.</value>
         [ConfigurationProperty("dollar", IsRequired = true)]
         public decimal Dollar
         {
             get { return this["dollar"].ToDecimal(); }
             set { this["dollar"] = value; }
         }
-
+		/// <summary>
+		/// Gets or sets the currency.
+		/// </summary>
+		/// <value>The currency.</value>
         [ConfigurationProperty("currency", IsRequired = true)]
         public int Currency
         {
             get { return this["currency"].ToInt(); }
             set { this["currency"] = value; }
         }
-
+		/// <summary>
+		/// Gets or sets the silver piece.
+		/// </summary>
+		/// <value>The silver piece.</value>
         [ConfigurationProperty("silverPiece", IsRequired = true)]
         public int SilverPiece
         {

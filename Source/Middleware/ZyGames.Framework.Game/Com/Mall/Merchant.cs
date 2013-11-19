@@ -40,7 +40,11 @@ namespace ZyGames.Framework.Game.Com.Mall
         private readonly int _merchantId;
         private readonly MallController _controller;
         private List<GoodsData> _goodsList = new List<GoodsData>();
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Com.Mall.Merchant"/> class.
+		/// </summary>
+		/// <param name="merchantId">Merchant identifier.</param>
+		/// <param name="controller">Controller.</param>
         public Merchant(int merchantId, MallController controller)
         {
             if (controller == null)

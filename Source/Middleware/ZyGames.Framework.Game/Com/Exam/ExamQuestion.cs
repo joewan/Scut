@@ -34,6 +34,9 @@ namespace ZyGames.Framework.Game.Com.Exam
     /// </summary>
     public abstract class ExamQuestion<T> : AbstractExam<T> where T : QuestionData, new()
     {
+		/// <summary>
+		/// The cache set.
+		/// </summary>
         protected ConfigCacheSet<T> CacheSet;
         /// <summary>
         /// 

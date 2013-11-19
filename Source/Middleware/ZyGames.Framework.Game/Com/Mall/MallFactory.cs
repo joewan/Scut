@@ -39,7 +39,11 @@ namespace ZyGames.Framework.Game.Com.Mall
     public static class MallFactory
     {
         private static Dictionary<int, Merchant> _merchantList = new Dictionary<int, Merchant>();
-
+		/// <summary>
+		/// Registers the merchant.
+		/// </summary>
+		/// <param name="merchantId">Merchant identifier.</param>
+		/// <param name="controller">Controller.</param>
         public static void RegisterMerchant(int merchantId, MallController controller)
         {
             if (controller == null)
@@ -53,12 +57,18 @@ namespace ZyGames.Framework.Game.Com.Mall
                 _merchantList.Add(merchantId, merchant);
             }
         }
-
+		/// <summary>
+		/// Gets the merchant.
+		/// </summary>
+		/// <returns>The merchant.</returns>
+		/// <param name="merchantId">Merchant identifier.</param>
         public static Merchant GetMerchant(int merchantId)
         {
             return _merchantList.ContainsKey(merchantId) ? _merchantList[merchantId] : null;
         }
-
+		/// <summary>
+		/// Releases all resource used by the object.
+		/// </summary>
         public static void Dispose()
         {
             _merchantList.Clear();

@@ -32,9 +32,15 @@ using ZyGames.Framework.Data.Sql;
 
 namespace ZyGames.Framework.Game.Pay
 {
+	/// <summary>
+	/// Order form BL.
+	/// </summary>
     public class OrderFormBLL
     {
-        //添加订单
+        /// <summary>
+        /// Add the specified model.
+        /// </summary>
+        /// <param name="model">Model.</param>
         public bool Add(OrderInfo model)
         {
             model.CreateDate = DateTime.Now;
@@ -91,7 +97,13 @@ namespace ZyGames.Framework.Game.Pay
             return rows > 0;
         }
 
-        //获取游戏币
+		/// <summary>
+		/// 获取游戏币.
+		/// </summary>
+		/// <returns>The list.</returns>
+		/// <param name="game">Game.</param>
+		/// <param name="Server">Server.</param>
+		/// <param name="Account">Account.</param>
         public OrderInfo[] GetList(int game, int Server, string Account)
         {
             //return dal.GetList(game, Server, Account);
@@ -120,7 +132,11 @@ namespace ZyGames.Framework.Game.Pay
             }
         }
 
-
+		/// <summary>
+		/// Determines whether this instance is exists the specified OrderNo.
+		/// </summary>
+		/// <returns><c>true</c> if this instance is exists the specified OrderNo; otherwise, <c>false</c>.</returns>
+		/// <param name="OrderNo">Order no.</param>
         public bool IsExists(string OrderNo)
         {
             string sql = "select top 1 OrderNO from OrderInfo where OrderNO=@OrderNO";
@@ -129,7 +145,12 @@ namespace ZyGames.Framework.Game.Pay
             //return dal.IsExists(OrderNo);
         }
 
-
+		/// <summary>
+		/// Updates the by91.
+		/// </summary>
+		/// <returns><c>true</c>, if by91 was updated, <c>false</c> otherwise.</returns>
+		/// <param name="model">Model.</param>
+		/// <param name="callback">If set to <c>true</c> callback.</param>
         public bool UpdateBy91(OrderInfo model, bool callback)
         {
             CommandStruct command = new CommandStruct("OrderInfo", CommandMode.Modify);
@@ -168,7 +189,12 @@ namespace ZyGames.Framework.Game.Pay
             return rows > 0;
         }
 
-
+		/// <summary>
+		/// Add91s the pay.
+		/// </summary>
+		/// <returns><c>true</c>, if pay was add91ed, <c>false</c> otherwise.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="callback">If set to <c>true</c> callback.</param>
         public bool Add91Pay(OrderInfo order, bool callback)
         {
             if (!IsExists(order.OrderNO))
@@ -210,7 +236,10 @@ namespace ZyGames.Framework.Game.Pay
         }
 
 
-        //是否发送修改
+        /// <summary>
+        /// Updatestr the specified OrderNo.
+        /// </summary>
+        /// <param name="OrderNo">Order no.</param>
         public bool Updatestr(string OrderNo)
         {
             CommandStruct command = new CommandStruct("OrderInfo", CommandMode.Modify);

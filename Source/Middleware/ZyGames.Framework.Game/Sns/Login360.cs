@@ -25,63 +25,36 @@ using System.Web;
 
 namespace ZyGames.Framework.Game.Sns
 {
-    public class Login360 : ILogin
+	/// <summary>
+	/// Login360.
+	/// </summary>
+    public class Login360 : AbstractLogin
     {
         private string _retailID = string.Empty;
         private string _pid = string.Empty;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.Login360"/> class.
+		/// </summary>
+		/// <param name="retailID">Retail I.</param>
+		/// <param name="pid">Pid.</param>
         public Login360(string retailID, string pid)
         {
             this._retailID = retailID;
             this._pid = pid;
         }
-
-        #region ILogin 成员
-
-        public string PassportID
-        {
-            get;
-            set;
-        }
-
-        public string UserID
-        {
-            get;
-            set;
-        }
-
-        public string Password
-        {
-            get;
-            set;
-        }
-
-        public string SessionID
-        {
-            get;
-            set;
-        }
-
-        protected static string GetSessionId()
-        {
-            string sessionId = string.Empty;
-            if (HttpContext.Current != null && HttpContext.Current.Session != null)
-            {
-                sessionId = HttpContext.Current.Session.SessionID;
-            }
-            else
-            {
-                sessionId = System.Guid.NewGuid().ToString().Replace("-", string.Empty);
-            }
-            return sessionId;
-        }
-
-        public string GetRegPassport()
+		/// <summary>
+		/// 注册通行证
+		/// </summary>
+		/// <returns></returns>
+        public override string GetRegPassport()
         {
             return this.PassportID;
         }
-
-        public bool CheckLogin()
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+        public override bool CheckLogin()
         {
             string[] arr = SnsManager.LoginByRetail(_retailID, _pid);
             this.UserID = arr[0];
@@ -90,6 +63,5 @@ namespace ZyGames.Framework.Game.Sns
             return true;
         }
 
-        #endregion
     }
 }

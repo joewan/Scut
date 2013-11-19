@@ -22,9 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 using Newtonsoft.Json;
 using ProtoBuf;
 using ZyGames.Framework.Common;
@@ -40,13 +37,27 @@ namespace ZyGames.Framework.Game.Context
     [Serializable, ProtoContract]
     public abstract class BaseUser : BaseEntity
     {
-        protected BaseUser(AccessLevel access)
-            : base(access)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Context.BaseUser"/> class.
+		/// </summary>
+        protected BaseUser()
         {
         }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Context.BaseUser"/> class.
+		/// </summary>
+		/// <param name="access">Access.</param>
+        protected BaseUser(AccessLevel access)
+            : base(access)
+		{
+		    SocketSid = string.Empty;
+		}
 
         private ContextCacheSet<CacheItem> _userData;
-
+		/// <summary>
+		/// Gets the user data.
+		/// </summary>
+		/// <value>The user data.</value>
         public ContextCacheSet<CacheItem> UserData
         {
             get
@@ -63,11 +74,20 @@ namespace ZyGames.Framework.Game.Context
         /// 在线间隔小时数
         /// </summary>
         protected int OnlineHourInterval = 8;
-
+		/// <summary>
+		/// Gets a value indicating whether this instance is feng jin status.
+		/// </summary>
+		/// <value><c>true</c> if this instance is feng jin status; otherwise, <c>false</c>.</value>
         public abstract bool IsFengJinStatus { get; }
-
+		/// <summary>
+		/// Gets or sets the online date.
+		/// </summary>
+		/// <value>The online date.</value>
         public abstract DateTime OnlineDate { get; set; }
-
+		/// <summary>
+		/// Gets a value indicating whether this instance is inlining.
+		/// </summary>
+		/// <value><c>true</c> if this instance is inlining; otherwise, <c>false</c>.</value>
         public bool IsInlining
         {
             get

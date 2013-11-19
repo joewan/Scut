@@ -57,13 +57,14 @@ namespace ZyGames.Framework.Game.Pay
         }
 
         /// <summary>
-        /// 91充值
+        /// Get91s the pay info.
         /// </summary>
-        /// <param name="game"></param>
-        /// <param name="Server"></param>
-        /// <param name="Account"></param>
-        /// <param name="ServiceName"></param>
-        /// <param name="orderNo"></param>
+        /// <param name="game">Game.</param>
+        /// <param name="Server">Server.</param>
+        /// <param name="Account">Account.</param>
+        /// <param name="ServiceName">Service name.</param>
+        /// <param name="orderNo">Order no.</param>
+        /// <param name="RetailID">Retail I.</param>
         public static void get91PayInfo(int game, int Server, string Account, string ServiceName, string orderNo, string RetailID)
         {
             //增加游戏名称避免出现游戏名称为空的现象 panx 2012-11-26
@@ -97,13 +98,16 @@ namespace ZyGames.Framework.Game.Pay
 
 
         /// <summary>
-        /// appstroe充值
+		/// appstroe充值
         /// </summary>
-        /// <param name="game"></param>
-        /// <param name="Server"></param>
-        /// <param name="Account"></param>
-        /// <param name="Silver"></param>
-        /// <param name="orderNo"></param>
+        /// <param name="game">Game.</param>
+        /// <param name="Server">Server.</param>
+        /// <param name="Account">Account.</param>
+        /// <param name="Silver">Silver.</param>
+        /// <param name="Amount">Amount.</param>
+        /// <param name="orderNo">Order no.</param>
+        /// <param name="RetailID">Retail I.</param>
+        /// <param name="MemberMac">Member mac.</param>
         public static void AppStorePay(int game, int Server, string Account, int Silver, int Amount, string orderNo, string RetailID, string MemberMac)
         {
             try
@@ -150,7 +154,10 @@ namespace ZyGames.Framework.Game.Pay
             return ordrBLL.GetServerData(gameID, serverID);
         }
 
-
+		/// <summary>
+		/// Abnormal the specified OrderNO.
+		/// </summary>
+		/// <param name="OrderNO">Order N.</param>
         public static void Abnormal(string OrderNO)
         {
             OrderFormBLL ordrBLL = new OrderFormBLL();
@@ -233,7 +240,11 @@ namespace ZyGames.Framework.Game.Pay
                 TraceLog.ReleaseWriteFatal(ex.ToString());
             }
         }
-
+		/// <summary>
+		/// Adds the order.
+		/// </summary>
+		/// <returns><c>true</c>, if order was added, <c>false</c> otherwise.</returns>
+		/// <param name="orderInfo">Order info.</param>
         public static bool AddOrder(OrderInfo orderInfo)
         {
             try

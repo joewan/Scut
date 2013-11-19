@@ -35,15 +35,15 @@ namespace ZyGames.Framework.Game.Service
     /// </summary>
     public abstract class GameStruct
     {
+		/// <summary>
+		/// The action time out.
+		/// </summary>
         public static int ActionTimeOut = 500;
 
         static GameStruct()
         {
-            int timeOut = 0;
-            if (int.TryParse(ConfigUtils.GetSetting("ActionTimeOut"), out timeOut))
-            {
-                if (timeOut > 0) ActionTimeOut = timeOut;
-            }
+            int timeOut = ConfigUtils.GetSetting("ActionTimeOut", 0);
+            if (timeOut > 0) ActionTimeOut = timeOut;
         }
 
         /// <summary>
@@ -296,7 +296,10 @@ namespace ZyGames.Framework.Game.Service
             }
             oBaseLog.SaveLog(aUseLog);
         }
-
+		/// <summary>
+		/// Saves the debu log.
+		/// </summary>
+		/// <param name="aUseLog">A use log.</param>
         protected void SaveDebuLog(String aUseLog)
         {
             if (oBaseLog == null)

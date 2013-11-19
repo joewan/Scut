@@ -30,9 +30,18 @@ namespace ZyGames.Framework.Game.Com.Generic
     /// </summary>
     public abstract class NoviceCard
     {
+		/// <summary>
+		/// The curr user identifier.
+		/// </summary>
         protected int CurrUserId;
+		/// <summary>
+		/// The length of the card.
+		/// </summary>
         protected int CardLength = 10;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Com.Generic.NoviceCard"/> class.
+		/// </summary>
+		/// <param name="userId">User identifier.</param>
         protected NoviceCard(int userId)
         {
             CurrUserId = userId;
@@ -48,9 +57,15 @@ namespace ZyGames.Framework.Game.Com.Generic
                 DoGenerate(GenerateID());
             }
         }
-
+		/// <summary>
+		/// Dos the generate.
+		/// </summary>
+		/// <param name="generateID">Generate I.</param>
         protected abstract void DoGenerate(string generateID);
-
+		/// <summary>
+		/// Gets a value indicating whether this instance has generate I.
+		/// </summary>
+		/// <value><c>true</c> if this instance has generate I; otherwise, <c>false</c>.</value>
         protected abstract bool HasGenerateID { get; }
 
         /// <summary>
@@ -87,7 +102,12 @@ namespace ZyGames.Framework.Game.Com.Generic
             }
             return true;
         }
-
+		/// <summary>
+		/// Dos the activate card.
+		/// </summary>
+		/// <returns><c>true</c>, if activate card was done, <c>false</c> otherwise.</returns>
+		/// <param name="cardId">Card identifier.</param>
+		/// <param name="cardUserId">Card user identifier.</param>
         protected abstract bool DoActivateCard(string cardId, int cardUserId);
 
         /// <summary>
@@ -109,11 +129,24 @@ namespace ZyGames.Framework.Game.Com.Generic
             }
             return true;
         }
-
+		/// <summary>
+		/// Dos the prize.
+		/// </summary>
+		/// <param name="cardId">Card identifier.</param>
+		/// <param name="cardUserId">Card user identifier.</param>
+		/// <param name="lv">Lv.</param>
         protected abstract void DoPrize(string cardId, int cardUserId, short lv);
-
+		/// <summary>
+		/// Determines whether this instance has prize the specified userLv prizeLv.
+		/// </summary>
+		/// <returns><c>true</c> if this instance has prize the specified userLv prizeLv; otherwise, <c>false</c>.</returns>
+		/// <param name="userLv">User lv.</param>
+		/// <param name="prizeLv">Prize lv.</param>
         protected abstract bool HasPrize(short userLv, short prizeLv);
-
+		/// <summary>
+		/// Gets the package prize lv.
+		/// </summary>
+		/// <value>The package prize lv.</value>
         protected abstract string[] PackagePrizeLv { get; }
     }
 }

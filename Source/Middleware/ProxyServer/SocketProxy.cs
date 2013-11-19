@@ -28,7 +28,7 @@ using System.Web;
 using System.Threading;
 using System.Collections.Specialized;
 using NLog;
-using ZyGames.Framework.NetLibrary;
+using ZyGames.Framework.RPC.Sockets;
 
 namespace ProxyServer
 {
@@ -61,7 +61,7 @@ namespace ProxyServer
             listener.Connected += new ConnectionEventHandler(socketLintener_Connected);
             listener.Disconnected += new ConnectionEventHandler(socketLintener_Disconnected);
             listener.StartListen();
-            Logger.Info("TCP监听启动，端口号：{0}。", ListenPort);
+			Logger.Info("TCP listent is started, The port:{0}.", ListenPort);
 
             timer = new Timer(Check, null, proxyCheckPeriod, proxyCheckPeriod);
         }
@@ -70,7 +70,7 @@ namespace ProxyServer
         {
             if (Logger.IsDebugEnabled)
             {
-                Logger.Debug("Tcp连接数：{0}", clientConnections.Count);
+                Logger.Debug("Tcp connect count：{0}", clientConnections.Count);
             }
         }
 
@@ -96,11 +96,11 @@ namespace ProxyServer
 
                     try
                     {
-                        gsConnectionManager.Send(clientConnection.GameId,clientConnection.ServerId, paramData);
+                        gsConnectionManager.Send(clientConnection.GameId, clientConnection.ServerId, paramData);
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error("发送tcp连接断开通知失败。", ex);
+                        Logger.Error("Send to tcp disconnected notify failed", ex);
                     }
                 }
             }
@@ -124,16 +124,22 @@ namespace ProxyServer
 
         void socketLintener_DataReceived(object sender, ConnectionEventArgs e)
         {
-            var data = Encoding.UTF8.GetString(e.Data);
+            var data = Encoding.ASCII.GetString(e.Data);
+			
+            string routeName = string.Empty;
             int index = data.LastIndexOf("?d=");
             if (index > 0)
             {
+                if (data.StartsWith("route:", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    routeName = data.Substring(6, index - 6);
+                }
                 data = data.Substring(index, data.Length - index);
             }
             data = HttpUtility.ParseQueryString(data)["d"];
-            int gameId,serverId, statuscode;
+            int gameId, serverId, statuscode;
             var ip = e.Socket.RemoteEndPoint.ToString().Split(new char[] { ':' })[0];
-            var requestParam = RequestParse.Parse(ip, "", data, out gameId,out serverId, out statuscode);
+            var requestParam = RequestParse.Parse(ip, "", data, out gameId, out serverId, out statuscode);
             if (statuscode != (int)HttpStatusCode.OK)
             {// 接收到非法数据
                 listener.CloseSocket(e.Socket);
@@ -153,12 +159,20 @@ namespace ProxyServer
             requestParam["UserHostAddress"] = ip;
             requestParam["ssid"] = clientConnection.SSID.ToString("N");
             requestParam["http"] = "0";
-
-            byte[] paramData = Encoding.ASCII.GetBytes(RequestParse.ToQueryString(requestParam));
+            string paramStr = string.Format("{0}&UserHostAddress={1}&ssid={2}&http=0",
+                data,
+                ip,
+                requestParam["ssid"]);
+            if (!string.IsNullOrEmpty(routeName))
+            {
+                requestParam["route"] = routeName;
+                paramStr += "&route=" + routeName;
+            }
+            byte[] paramData = Encoding.ASCII.GetBytes(paramStr);
 
             try
             {
-                gsConnectionManager.Send(gameId,serverId, paramData);
+                gsConnectionManager.Send(gameId, serverId, paramData);
             }
             catch (Exception ex)
             {
@@ -186,11 +200,11 @@ namespace ProxyServer
                 Logger.Error("SendDataBack。", ex);
                 return false;
             }
-        }       
+        }
     }
 
     class ClientConnection
-    { 
+    {
         public int GameId { get; set; }
         public int ServerId { get; set; }
         public Guid SSID { get; set; }

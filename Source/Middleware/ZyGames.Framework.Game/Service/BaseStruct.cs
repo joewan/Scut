@@ -31,12 +31,15 @@ using ZyGames.Framework.Game.Lang;
 
 namespace ZyGames.Framework.Game.Service
 {
+	/// <summary>
+	/// Base struct.
+	/// </summary>
     public abstract class BaseStruct : GameStruct
     {
         /// <summary>
         /// 
         /// </summary>
-        public static string PublishType = ConfigUtils.GetSetting("PublishType");
+        public static string PublishType = ConfigUtils.GetSetting("PublishType", "Release");
 
         /// <summary>
         /// 本次登录SessionID句柄
@@ -60,11 +63,12 @@ namespace ZyGames.Framework.Game.Service
             set { _userId = value; }
         }
         /// <summary>
-        /// 
+        /// User创建工厂
         /// </summary>
         public Func<int, BaseUser> UserFactory { get; set; }
+
         /// <summary>
-        /// 
+        /// 当前游戏上下文对象
         /// </summary>
         public GameContext Current { get; private set; }
 
@@ -72,6 +76,7 @@ namespace ZyGames.Framework.Game.Service
         /// url分解器
         /// </summary>
         protected HttpGet httpGet;
+
         /// <summary>
         /// 是否是压力测试
         /// </summary>
@@ -85,7 +90,13 @@ namespace ZyGames.Framework.Game.Service
         /// <summary>
         /// 
         /// </summary>
-        public static bool IsRealse { get { return PublishType.Equals("Release"); } }
+        public static bool IsRealse
+        {
+            get
+            {
+                return PublishType.Equals("Release", StringComparison.CurrentCultureIgnoreCase);
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -133,19 +144,17 @@ namespace ZyGames.Framework.Game.Service
             {
                 St = st;
             }
-            if (!IsIgnoreUid())
-            {
-                InitContext(actionId, UserId);
-            }
+            InitContext(httpGet.SessionId, actionId, UserId);
             InitAction();
             InitChildAction();
         }
 
-        internal protected void InitContext(int actionId, int userId)
+        private void InitContext(string ssid, int actionId, int userId)
         {
-            if (userId > 0)
+            Current = GameContext.GetInstance(ssid, actionId, userId);
+            if (UserFactory != null)
             {
-                Current = GameContext.GetInstance(actionId, userId);
+                Current.User = UserFactory(userId);
             }
         }
         /// <summary>
@@ -155,19 +164,12 @@ namespace ZyGames.Framework.Game.Service
         public ILocking RequestLock()
         {
             ILocking strategy = null;
-            if (Current != null)
+            strategy = Current.MonitorLock.Lock();
+            if (strategy == null || !strategy.TryEnterLock())
             {
-                var tempLock = Current.MonitorLock.Lock();
-                if (tempLock != null && tempLock.TryEnterLock())
-                {
-                    strategy = tempLock;
-                }
-                else
-                {
-                    ErrorCode = LanguageHelper.GetLang().ErrorCode;
-                    if (!IsRealse) ErrorInfo = LanguageHelper.GetLang().ServerBusy;
-                    TraceLog.WriteError("Action-{0} Uid:{1} locked timeout.", actionId, UserId);
-                }
+                ErrorCode = LanguageHelper.GetLang().ErrorCode;
+                if (!IsRealse) ErrorInfo = LanguageHelper.GetLang().ServerBusy;
+                TraceLog.WriteError("Action-{0} Uid:{1} locked timeout.", actionId, UserId);
             }
             return strategy;
         }
@@ -207,6 +209,10 @@ namespace ZyGames.Framework.Game.Service
                     return false;
                 }
                 result = TakeAction();
+                if(Current.UserId == 0 && UserId > 0)
+                {
+                    Current.SetValue(UserId);
+                }
                 TakeActionAffter(result);
             }
             catch (Exception ex)

@@ -69,7 +69,7 @@ local function ScutMain()
 
     function OnHandleData(pScene, nTag, nNetRet, pData)
         pScene = tolua.cast(pScene, "CCScene")
-        pScene:execCallback(nTag, nNetRet, pData)
+        g_scenes[pScene]:execCallback(nTag, nNetRet, pData)
     end
 
     math.randomseed(os.time());
@@ -122,6 +122,7 @@ function __G__TRACKBACK__(msg)
 end
 
 local function main()
+
     ScutMain()
     testScene.init()
 end

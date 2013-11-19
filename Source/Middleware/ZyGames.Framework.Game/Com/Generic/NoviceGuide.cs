@@ -38,6 +38,9 @@ namespace ZyGames.Framework.Game.Com.Generic
         where T : UserGuide, new()
         where V : GuideData, new()
     {
+		/// <summary>
+		/// The user identifier.
+		/// </summary>
         protected readonly int UserId;
         private ShareCacheStruct<V> _guideSet;
         private T _userGuide;

@@ -35,10 +35,6 @@ namespace ZyGames.Framework.Game.Sns
     {
         private const string PreAccount = "Z";
         /// <summary>
-        /// 生成在SnsPassportLog表中的通行证ID
-        /// </summary>
-        //private int _iSnsPidValue;
-        /// <summary>
         /// ID的状态
         /// </summary>
         private enum PassMark
@@ -127,7 +123,6 @@ namespace ZyGames.Framework.Game.Sns
         /// 检验注册的通行证ID是否在SnsPassportLog列表中。
         /// </summary>
         /// <param name="aPid"></param>
-        /// <param name="connection"></param>
         /// <returns>检测通过，则返回True，否则返回False</returns>
         public bool VerifyRegPassportId(string aPid)
         {
@@ -155,7 +150,7 @@ namespace ZyGames.Framework.Game.Sns
         }
         /// <summary>
         /// </summary>
-        /// <param name="aTran"></param>
+		/// <param name="aPid"></param>
         /// <returns></returns>
         public bool SetPassportReg(string aPid)
         {

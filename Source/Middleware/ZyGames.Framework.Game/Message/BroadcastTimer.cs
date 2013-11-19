@@ -39,37 +39,72 @@ namespace ZyGames.Framework.Game.Message
     /// </summary>
     public class BroadcastTimer
     {
+		///<summary>
+		/// </summary>
         public delegate void BroadcastCallback(NoticeMessage message);
 
         private int _isRunning;
         private readonly BroadcastCallback _callback;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Message.BroadcastTimer"/> class.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
         public BroadcastTimer(BroadcastCallback callback)
         {
             _callback = callback;
         }
-
+		/// <summary>
+		/// Add the specified message, beginTime, endTime, isCycle and secondInterval.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="beginTime">Begin time.</param>
+		/// <param name="endTime">End time.</param>
+		/// <param name="isCycle">If set to <c>true</c> is cycle.</param>
+		/// <param name="secondInterval">Second interval.</param>
         public void Add(NoticeMessage message, string beginTime, string endTime, bool isCycle, int secondInterval)
         {
             TimeListener.Append(new PlanConfig(DoBroadcast, beginTime, endTime, isCycle, secondInterval) { Name = "BroadcastTimer", Target = message });
         }
-
+		/// <summary>
+		/// Add the specified message, week, beginTime, endTime, isCycle and secondInterval.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="week">Week.</param>
+		/// <param name="beginTime">Begin time.</param>
+		/// <param name="endTime">End time.</param>
+		/// <param name="isCycle">If set to <c>true</c> is cycle.</param>
+		/// <param name="secondInterval">Second interval.</param>
         public void Add(NoticeMessage message, DayOfWeek week, string beginTime, string endTime, bool isCycle, int secondInterval)
         {
             TimeListener.Append(new PlanConfig(DoBroadcast, week, beginTime, endTime, isCycle, secondInterval) { Name = "BroadcastTimer", Target = message });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="messageId"></param>
+        /// <returns></returns>
         public bool Remove(Guid messageId)
         {
+            return Remove(m => m.Id == messageId);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="match"></param>
+        /// <returns></returns>
+        public bool Remove(Predicate<NoticeMessage> match)
+        {
             return TimeListener.Remove(m =>
-             {
-                 if (m.Target is NoticeMessage)
-                 {
-                     var temp = (NoticeMessage)m.Target;
-                     return Equals(temp.Id, messageId);
-                 }
-                 return false;
-             });
+            {
+                if (m.Target is NoticeMessage)
+                {
+                    var temp = (NoticeMessage)m.Target;
+                    return match(temp);
+                }
+                return false;
+            });
         }
 
         private void DoBroadcast(PlanConfig planConfig)

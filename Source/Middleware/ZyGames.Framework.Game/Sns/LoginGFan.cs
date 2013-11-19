@@ -24,14 +24,8 @@ THE SOFTWARE.
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using System.IO;
-using System.Net;
 using System.Web;
 using ZyGames.Framework.Common.Log;
-using ZyGames.Framework.Common.Security;
-using ZyGames.Framework.Common.Serialization;
-using ZyGames.Framework.Game.Context;
-using ZyGames.Framework.Game.Sns.Section;
 
 namespace ZyGames.Framework.Game.Sns
 {
@@ -42,49 +36,38 @@ namespace ZyGames.Framework.Game.Sns
     {
         private string _retailID;
         private string _uid;
-        private string _token;
-        private string username = string.Empty;
-
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.LoginGFan"/> class.
+		/// </summary>
+		/// <param name="retailID">Retail I.</param>
+		/// <param name="RetailUser">Retail user.</param>
         public LoginGFan(string retailID, string RetailUser)
         {
             this._retailID = retailID ?? "0011";
             _uid = RetailUser.Equals("0") ? string.Empty : RetailUser;
-            
+
         }
-
-        #region ILogin 成员
-
-       
-
-        protected static string GetSessionId()
-        {
-            string sessionId = string.Empty;
-            if (HttpContext.Current != null && HttpContext.Current.Session != null)
-            {
-                sessionId = HttpContext.Current.Session.SessionID;
-            }
-            else
-            {
-                sessionId = Guid.NewGuid().ToString().Replace("-", string.Empty);
-            }
-            return sessionId;
-        }
-
+		/// <summary>
+		/// 注册通行证
+		/// </summary>
+		/// <returns></returns>
         public override string GetRegPassport()
         {
             return this.PassportID;
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
         public override bool CheckLogin()
         {
-            
-            if(string.IsNullOrEmpty(_uid))
+
+            if (string.IsNullOrEmpty(_uid))
             {
                 TraceLog.ReleaseWrite("The ChannelGFansdk  uid is null.");
                 return false;
             }
-            
+
             string[] arr = SnsManager.LoginByRetail(_retailID, _uid);
             this.UserID = arr[0];
             this.PassportID = arr[1];
@@ -92,27 +75,5 @@ namespace ZyGames.Framework.Game.Sns
             return true;
         }
 
-        #endregion
-
-        private string AMD5(string str1)
-        {
-            return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str1, "MD5").ToUpper();
-        }
-
-        private string SHA256(string str)
-        {
-            byte[] tmpByte;
-            SHA256 sha256 = new SHA256Managed();
-            tmpByte = sha256.ComputeHash(Encoding.UTF8.GetBytes(str));
-            sha256.Clear();
-            string result = string.Empty;
-            foreach (byte x in tmpByte)
-            {
-                result += string.Format("{0:x2}", x);
-            }
-            return result.ToUpper();
-        }
     }
-
-   
 }

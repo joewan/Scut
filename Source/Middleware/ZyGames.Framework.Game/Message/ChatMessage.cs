@@ -68,12 +68,19 @@ namespace ZyGames.Framework.Game.Model
         [ProtoMember(1005)]
         public virtual int ToUserID { get; set; }
 
-
+		/// <summary>
+		/// Gets the identity identifier.
+		/// </summary>
+		/// <returns>The identity identifier.</returns>
         protected override int GetIdentityId()
         {
             return DefIdentityId;
         }
-
+		/// <summary>
+		/// 对象索引器属性
+		/// </summary>
+		/// <returns></returns>
+		/// <param name="index">Index.</param>
         protected override object this[string index]
         {
             get { throw new NotImplementedException(); }

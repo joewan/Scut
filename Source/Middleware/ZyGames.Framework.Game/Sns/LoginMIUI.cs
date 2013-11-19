@@ -1,16 +1,40 @@
-﻿using System;
+﻿/****************************************************************************
+Copyright (c) 2013-2015 scutgame.com
+
+http://www.scutgame.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+using System;
 using System.Collections;
-using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using ZyGames.Framework.Common.Log;
 using ZyGames.Framework.Common.Serialization;
+using ZyGames.Framework.Game.Configuration;
 using ZyGames.Framework.Game.Context;
-using ZyGames.Framework.Game.Sns._91sdk;
-using ZyGames.Framework.Game.Sns.Section;
 
 namespace ZyGames.Framework.Game.Sns
 {
+	/// <summary>
+	/// Login MIU.
+	/// </summary>
     public class LoginMIUI : AbstractLogin
     {
         private string _retailID = string.Empty;
@@ -23,25 +47,35 @@ namespace ZyGames.Framework.Game.Sns
         private string _aceessTokenUrl = string.Empty;
         private string _appSecret = string.Empty;
         private string _sid = string.Empty;
+		/// <summary>
+		/// The parameters.
+		/// </summary>
         protected Hashtable parameters = new Hashtable();
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.LoginMIUI"/> class.
+		/// </summary>
+		/// <param name="retailID">Retail I.</param>
+		/// <param name="retailUser">Retail user.</param>
+		/// <param name="sid">Sid.</param>
         public LoginMIUI(string retailID, string retailUser, string sid)
         {
             this._retailID = retailID;
             this._retailUser = retailUser;
             this._sid = sid;
-            var sec = SdkSectionFactory.SectionMIUI;
-            if (sec != null)
+            GameChannel gameChannel = ZyGameBaseConfigManager.GameSetting.GetChannelSetting(ChannelType.channelMIUI);
+            if (gameChannel != null)
             {
-                var els = sec.Channels[retailID];
-                if (els == null)
+                Url = gameChannel.Url;
+                GameSdkSetting sdkSetting = gameChannel.GetSetting(retailID);
+                if (sdkSetting != null)
                 {
-                    TraceLog.ReleaseWrite("The sdkChannel section channelMIUI:{0} is null.", retailID);
+                    AppId = sdkSetting.AppId;
+                    AppKey = sdkSetting.AppKey;
                 }
                 else
                 {
-                    Url = sec.Url;
-                    AppId = els.AppId;
-                    AppKey = els.AppKey;
+                    TraceLog.ReleaseWrite("The sdkChannel section channelMIUI:{0} is null.", retailID);
                 }
             }
             else
@@ -49,29 +83,18 @@ namespace ZyGames.Framework.Game.Sns
                 TraceLog.ReleaseWrite("The sdkChannel MIUI section is null.");
             }
         }
-
-
-        protected static string GetSessionId()
-        {
-            string sessionId = string.Empty;
-            if (HttpContext.Current != null && HttpContext.Current.Session != null)
-            {
-                sessionId = HttpContext.Current.Session.SessionID;
-            }
-            else
-            {
-                sessionId = Guid.NewGuid().ToString().Replace("-", string.Empty);
-            }
-            return sessionId;
-        }
-
-
-
+		/// <summary>
+		/// 注册通行证
+		/// </summary>
+		/// <returns></returns>
         public override string GetRegPassport()
         {
             return this.PassportID;
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
         public override bool CheckLogin()
         {
             SetParameter("appId", AppId);
@@ -85,7 +108,7 @@ namespace ZyGames.Framework.Game.Sns
                 _retailUser,
                 HttpUtility.UrlEncode(sing)
             );
-            urlData =Url+"?"+ urlData;
+            urlData = Url + "?" + urlData;
             string result = HttpRequestManager.GetStringData(urlData, "GET");
             try
             {
@@ -116,29 +139,11 @@ namespace ZyGames.Framework.Game.Sns
                 return false;
             }
         }
-        /****************************************************************************
-Copyright (c) 2013-2015 scutgame.com
-
-http://www.scutgame.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+		/// <summary>
+		/// Sets the parameter.
+		/// </summary>
+		/// <param name="parameter">Parameter.</param>
+		/// <param name="parameterValue">Parameter value.</param>
         public void SetParameter(string parameter, string parameterValue)
         {
             if (parameter != null && parameter != "")
@@ -151,6 +156,10 @@ THE SOFTWARE.
                 parameters.Add(parameter, parameterValue);
             }
         }
+		/// <summary>
+		/// Gets the sign.
+		/// </summary>
+		/// <returns>The sign.</returns>
         public string GetSign()
         {
 
@@ -168,9 +177,20 @@ THE SOFTWARE.
 
             return strSign.ToString().TrimEnd('&');
         }
+		/// <summary>
+		/// 
+		/// </summary>
         public class SDKMIUIError
         {
+			/// <summary>
+			/// Gets or sets the errcode.
+			/// </summary>
+			/// <value>The errcode.</value>
             public string errcode { get; set; }
+			/// <summary>
+			/// Gets or sets the error message.
+			/// </summary>
+			/// <value>The error message.</value>
             public string errMsg { get; set; }
         }
 

@@ -23,6 +23,9 @@ THE SOFTWARE.
 ****************************************************************************/
 namespace ZyGames.Framework.Game.Service
 {
+	/// <summary>
+	/// Login status.
+	/// </summary>
     public enum LoginStatus
     {
         /// <summary>

@@ -33,6 +33,9 @@ namespace ZyGames.Framework.Game.Com.Model
     [Serializable, ProtoContract]
     public class GoodsData
     {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Com.Model.GoodsData"/> class.
+		/// </summary>
         public GoodsData()
         {
 
@@ -72,7 +75,10 @@ namespace ZyGames.Framework.Game.Com.Model
             get;
             set;
         }
-
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>The name.</value>
         public string Name
         {
             get;

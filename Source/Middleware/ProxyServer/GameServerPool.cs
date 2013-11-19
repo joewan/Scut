@@ -24,10 +24,11 @@ THE SOFTWARE.
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Net.Security;
 using System.Text;
 using NLog;
 using ProxyServer.net._36you.dir;
-using ZyGames.Framework.NetLibrary;
+using ZyGames.Framework.RPC.Sockets;
 using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
@@ -47,19 +48,29 @@ namespace ProxyServer
 
         GameServerListManager()
         {
-            DirServiceSoapClient dirClient = new DirServiceSoapClient();
-            string keyCode = "";
-            var gameList = dirClient.GetGame();
-            foreach (var gameInfo in gameList)
+            try
             {
-                var serverList = dirClient.GetServers(gameInfo.ID, false, false);
-                foreach (var serverInfo in serverList)
+
+                DirServiceSoapClient dirClient = new DirServiceSoapClient();
+                ServicePointManager.ServerCertificateValidationCallback += (se, cert, chain, sslerror) => true;
+
+                string keyCode = "";
+                var gameList = dirClient.GetGame();
+                foreach (var gameInfo in gameList)
                 {
-                    keyCode = string.Format("{0}_{1}", gameInfo.ID, serverInfo.ID);
-                    serversPool.TryAdd(keyCode, serverInfo);
+                    var serverList = dirClient.GetServers(gameInfo.ID, false, false);
+                    foreach (var serverInfo in serverList)
+                    {
+                        keyCode = string.Format("{0}_{1}", gameInfo.ID, serverInfo.ID);
+                        serversPool.TryAdd(keyCode, serverInfo);
+                    }
                 }
+                logger.Info("load game server:{0}", string.Join(",", serversPool.Keys));
             }
-            logger.Info("加载游戏服：{0}", string.Join(",", serversPool.Keys));
+            catch (Exception ex)
+            {
+                logger.Error("load game server error:{0}", ex);
+            }
         }
 
         public ServerInfo Find(int gameId, int serverId)
@@ -97,9 +108,13 @@ namespace ProxyServer
                     {
                         var serverInfo = GameServerListManager.Current.Find(gameId, serverId);
                         //需要实现的,加载服务器列表到proxy pool中,必须实现
-                        if (serverInfo == null) throw new ApplicationException(string.Format("游戏id={0}服务器id={1}不存在。", gameId, serverId));
-                        if (!serverInfo.IsEnable) throw new ApplicationException(string.Format("游戏id={0}服务器id={1}未开放。", gameId, serverId));
-                        var arr = serverInfo.ServerUrl.Split(':');
+                        if (serverInfo == null)
+                            throw new ApplicationException(string.Format("游戏id={0}服务器id={1}不存在。", gameId, serverId));
+                        if (!serverInfo.IsEnable)
+                            throw new ApplicationException(string.Format("游戏id={0}服务器id={1}未开放。", gameId, serverId));
+                        var arr = !string.IsNullOrEmpty(serverInfo.IntranetAddress)
+                            ? serverInfo.IntranetAddress.Split(':')
+                            : serverInfo.ServerUrl.Split(':');
                         var ip = arr[0];
                         var port = Convert.ToInt32(arr[1]);
                         connection = new GameServerConnection(ip, port, proxy);
@@ -117,10 +132,8 @@ namespace ProxyServer
         private ClientSocket clientSocket;
         private GameProxy proxy;
         private static readonly Logger logger = LogManager.GetLogger("GameServerConnection");
-
         private IPEndPoint remoteEndPoint;
         private object syncRoot = new object();
-
         private static int bufferSize = Util.GetAppSetting<int>("BufferSize", 8192);
 
         public GameServerConnection(string ip, int port, GameProxy proxy)
@@ -133,6 +146,7 @@ namespace ProxyServer
             clientSocket.DataReceived += new SocketEventHandler(DataReceived);
             clientSocket.Disconnected += new SocketEventHandler(Disconnected);
         }
+
         private void EnsureConnected()
         {
             if (!clientSocket.Connected)
@@ -154,6 +168,7 @@ namespace ProxyServer
                 }
             }
         }
+
         void Disconnected(object sender, SocketEventArgs e)
         {
             proxy.FlushConnected();

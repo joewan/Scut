@@ -60,7 +60,7 @@ namespace ProxyServer
                 listener.Prefixes.Add(string.Format("{2}:{0}/{1}/", gamePort, gameName, h));
             }
             listener.Start();
-            Logger.Info("Http监听启动，端口号：{0}。", gamePort);
+            Logger.Info("Http listent is started,The port:{0}.", gamePort);
             listener.BeginGetContext(ListenerCallback, listener);
             timer = new Timer(Check, null, proxyCheckPeriod, proxyCheckPeriod);
         }

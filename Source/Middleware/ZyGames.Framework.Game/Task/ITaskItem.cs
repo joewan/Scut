@@ -27,6 +27,9 @@ using ZyGames.Framework.Event;
 
 namespace ZyGames.Framework.Game.Task
 {
+	/// <summary>
+	/// Task status.
+	/// </summary>
     public enum TaskStatus
     {
         /// <summary>
@@ -60,12 +63,25 @@ namespace ZyGames.Framework.Game.Task
     /// </summary>
     public interface ITaskItem
     {
+		/// <summary>
+		/// Gets or sets the user I.
+		/// </summary>
+		/// <value>The user I.</value>
         int UserID { get; set; }
-
+		/// <summary>
+		/// Gets or sets the task I.
+		/// </summary>
+		/// <value>The task I.</value>
         int TaskID { get; set; }
-
+		/// <summary>
+		/// Gets or sets the status.
+		/// </summary>
+		/// <value>The status.</value>
         TaskStatus Status { get; set; }
-
+		/// <summary>
+		/// Gets or sets the create date.
+		/// </summary>
+		/// <value>The create date.</value>
         DateTime CreateDate { get; set; }
     }
 }

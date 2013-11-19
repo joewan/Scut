@@ -31,13 +31,20 @@ namespace ZyGames.Framework.Game.Configuration
     /// </summary>
     public class ZyGameBaseBllSection : ConfigurationSection
     {
+		/// <summary>
+		/// Gets or sets the login.
+		/// </summary>
+		/// <value>The login.</value>
         [ConfigurationProperty("login", IsRequired = true)]
         public LoginElement Login
         {
             get { return this["login"] as LoginElement; }
             set { this["login"] = value; }
         }
-
+		/// <summary>
+		/// Gets or sets the combat.
+		/// </summary>
+		/// <value>The combat.</value>
         [ConfigurationProperty("combat", IsRequired = false)]
         public CombatElement Combat
         {

@@ -30,16 +30,27 @@ namespace ZyGames.Framework.Game.Configuration
     /// </summary>
     public class RetailCollection : ConfigurationElementCollection
     {
+		/// <summary>
+		/// Creates the new element.
+		/// </summary>
+		/// <returns>The new element.</returns>
         protected override ConfigurationElement CreateNewElement()
         {
             return new RetailElement();
         }
-
+		/// <summary>
+		/// Gets the element key.
+		/// </summary>
+		/// <returns>The element key.</returns>
+		/// <param name="element">Element.</param>
         protected override object GetElementKey(ConfigurationElement element)
         {
             return ((RetailElement)element).Id;
         }
-
+		/// <summary>
+		/// Gets the <see cref="ZyGames.Framework.Game.Configuration.RetailCollection"/> at the specified index.
+		/// </summary>
+		/// <param name="index">Index.</param>
         public RetailElement this[int index]
         {
             get
@@ -47,7 +58,10 @@ namespace ZyGames.Framework.Game.Configuration
                 return (RetailElement)base.BaseGet(index);
             }
         }
-
+		/// <summary>
+		/// Gets the <see cref="ZyGames.Framework.Game.Configuration.RetailCollection"/> with the specified key.
+		/// </summary>
+		/// <param name="key">Key.</param>
         public new RetailElement this[string key]
         {
             get

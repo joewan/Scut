@@ -35,9 +35,9 @@ namespace ProxyServer
 {
     class RequestParse
     {
-        private static string signkey = "44CAC8ED53714BF18D60C5C7B6296000";
+        private static string signkey = Util.GetAppSetting<string>("ProxySignkey", "44CAC8ED53714BF18D60C5C7B6296000");
         private static readonly Logger Logger = LogManager.GetLogger("RequestParse");
-        public static NameValueCollection Parse(string ip, string rawUrl, string data,out int gameId, out int serverId, out int statuscode)
+        public static NameValueCollection Parse(string ip, string rawUrl, string data, out int gameId, out int serverId, out int statuscode)
         {
             NameValueCollection nvc = new NameValueCollection();
             serverId = 0;
@@ -57,7 +57,7 @@ namespace ProxyServer
                 idx = data.IndexOf("sign=", StringComparison.InvariantCultureIgnoreCase);
                 if (idx == -1)
                 {
-                    statuscode = (int) HttpStatusCode.BadRequest;
+                    statuscode = (int)HttpStatusCode.BadRequest;
                     Logger.Error("参数sign不存在，Request[{0}][{1}]", data, ip);
                     return nvc;
                 }
@@ -67,7 +67,7 @@ namespace ProxyServer
                 string mycheckcode = Util.MD5_Encrypt(source, signkey, Encoding.UTF8);
                 if (string.Compare(clientCheckcode, mycheckcode, true) != 0)
                 {
-                    statuscode = (int) HttpStatusCode.Forbidden;
+                    statuscode = (int)HttpStatusCode.Forbidden;
                     Logger.Error("md5校验错误，Request[{0}][{1}]", data, ip);
                     return nvc;
                 }
@@ -88,13 +88,15 @@ namespace ProxyServer
                 statuscode = (int)HttpStatusCode.BadRequest;
                 Logger.Error("参数msgid不存在，Request[{0}][{1}]", data, ip);
                 return nvc;
-            }           
+            }
 
-            if (string.IsNullOrEmpty(nvc["sid"]))
+            var sid = nvc["sid"] ?? "";
+            var sp = sid.Split('|');
+            if (string.IsNullOrEmpty(nvc["sid"]) || sp.Length != 3)
             {
                 //serverid判断
                 if (!nvc.AllKeys.Contains("serverid", StringComparer.InvariantCultureIgnoreCase))
-                {                    
+                {
                     Logger.Warn("请求未传参数serverid或者sid，Request[{0}][{1}]", data, ip);
                 }
                 else if (!int.TryParse(nvc["serverid"], out serverId))
@@ -114,14 +116,6 @@ namespace ProxyServer
             }
             else
             {
-                var sid = nvc["sid"];
-                var sp = sid.Split('|'); 
-                if (sp.Length != 3)
-                {
-                    statuscode = (int)HttpStatusCode.BadRequest;
-                    Logger.Error("参数sid格式错误，Request[{0}][{1}]", data, ip);
-                    return nvc;
-                }
                 gameId = Convert.ToInt32(sp[1]);
                 serverId = Convert.ToInt32(sp[2]);
             }
@@ -186,7 +180,7 @@ namespace ProxyServer
                 WriteValue(ms, (int)ms.Length);
 
                 using (var gms = new MemoryStream())
-                using (var gzs = new  GZipOutputStream(gms))
+                using (var gzs = new GZipOutputStream(gms))
                 {
                     gzs.Write(ms.GetBuffer(), 0, (int)ms.Length);
                     gzs.Flush();

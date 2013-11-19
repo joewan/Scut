@@ -36,7 +36,10 @@ namespace ZyGames.Framework.Game.Com.Mall
     public abstract class MallController
     {
         private readonly ITrade _tradeStrategy;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Com.Mall.MallController"/> class.
+		/// </summary>
+		/// <param name="tradeStrategy">Trade strategy.</param>
         protected MallController(ITrade tradeStrategy)
         {
             _tradeStrategy = tradeStrategy;
@@ -78,7 +81,14 @@ namespace ZyGames.Framework.Game.Com.Mall
             return result;
         }
 
-
+		/// <summary>
+		/// Trades the goods.
+		/// </summary>
+		/// <returns><c>true</c>, if goods was traded, <c>false</c> otherwise.</returns>
+		/// <param name="user">User.</param>
+		/// <param name="goods">Goods.</param>
+		/// <param name="goodsNum">Goods number.</param>
+		/// <param name="errorCode">Error code.</param>
         public bool TradeGoods(BaseUser user, GoodsData goods, int goodsNum, out TradeErrorCode errorCode)
         {
             bool result = false;

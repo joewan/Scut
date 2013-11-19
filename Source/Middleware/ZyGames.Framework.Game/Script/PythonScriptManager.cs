@@ -86,7 +86,6 @@ namespace ZyGames.Framework.Game.Script
         static PythonScriptManager()
         {
             _instance = new PythonScriptManager();
-            _instance.Intialize();
         }
 
 
@@ -113,7 +112,7 @@ namespace ZyGames.Framework.Game.Script
 
         }
 
-        private void Intialize()
+        internal void Intialize()
         {
             try
             {
@@ -122,20 +121,22 @@ namespace ZyGames.Framework.Game.Script
                 _runtimePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
                 _runtimePath = Path.Combine(_runtimePath, PythonRootPath);
                 _routeConfigFileName = Path.Combine(_runtimePath, "Route.config.xml");
+                LoadRouteConfig(_routeConfigFileName);
+                bool isDebug = ConfigUtils.GetSetting("Python_IsDebug", false);
+                PythonScriptHost.Initialize(_runtimePath, LibPath, isDebug);
+
                 CacheListener routeListener = new CacheListener("__ACTION_ROUTES", 0, (key, value, reason) =>
                 {
-                    if (reason == CacheItemRemovedReason.DependencyChanged)
+					if (reason == CacheRemovedReason.Changed)
                     {
                         LoadRouteConfig(_routeConfigFileName);
                         //重新设置查找路径
+						//todo remark
                         PythonScriptHost.LibPath = LibPath;
                         PythonScriptHost.SetPythonSearchPath(_runtimePath);
                     }
                 }, _routeConfigFileName);
                 routeListener.Start();
-                LoadRouteConfig(_routeConfigFileName);
-                bool isDebug = ConfigUtils.GetSetting("Python_IsDebug", "false").ToBool();
-                PythonScriptHost.Initialize(_runtimePath, LibPath, isDebug);
             }
             catch (Exception ex)
             {
@@ -222,8 +223,9 @@ namespace ZyGames.Framework.Game.Script
 
         private string FormatLibPath(string path)
         {
-            string rootPath = _runtimePath.Replace("/", @"\").TrimEnd('\\') + "\\";
-            path = (path ?? "").Replace("/", @"\").Replace("$ROOT_PATH\\", rootPath);
+			string rootPath = _runtimePath.Replace( @"\","/").TrimEnd('\\').TrimEnd('/') + "/";
+			path = (path ?? "").Replace(@"\", "/").Replace("$ROOT_PATH/", rootPath);
+
             if (Directory.Exists(path))
             {
                 return new DirectoryInfo(path).FullName;
@@ -279,7 +281,7 @@ namespace ZyGames.Framework.Game.Script
             }
             catch (Exception ex)
             {
-                TraceLog.WriteError("加载脚本配置:{0}文件,{1}", moduleName, ex);
+                TraceLog.WriteError("Load script setting file {0} error:{1}", moduleName, ex);
             }
             return false;
         }

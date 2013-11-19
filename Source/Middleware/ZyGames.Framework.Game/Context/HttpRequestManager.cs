@@ -31,16 +31,17 @@ using ZyGames.Framework.Common.Log;
 
 namespace ZyGames.Framework.Game.Context
 {
+	/// <summary>
+	/// Http request manager.
+	/// </summary>
     public static class HttpRequestManager
     {
-        private static int httpRequestTimeOut = 10000; // 10秒超时
-
         #region GetPostData Post数据并获取返回数据
         /// <summary>
         /// GetPostData Post数据并获取返回数据
         /// </summary>
         /// <param name="url">url</param>
-        /// <param name="MethodType">请求类型</param>
+		/// <param name="methodType">请求类型</param>
         /// <returns></returns>
         private static string GetPostData(string url, string methodType)
         {

@@ -47,20 +47,32 @@ namespace ZyGames.Framework.Game.Cache
 
         static ChatCacheSet()
         {
-            MessageMaxCount = ConfigUtils.GetSetting("chatcache_maxcount", "3000").ToInt();
-            Timeout = ConfigUtils.GetSetting("chatcache_timeout", "1800").ToInt(); //30分钟
+            MessageMaxCount = ConfigUtils.GetSetting("chatcache_maxcount", 3000);
+            Timeout = ConfigUtils.GetSetting("chatcache_timeout", 1800); //30分钟
         }
-        
+        /// <summary>
+        /// 加载数据工厂
+        /// </summary>
+        /// <returns></returns>
         protected override bool LoadFactory()
         {
             return true;
         }
-
+		/// <summary>
+		/// 加载子项数据工厂
+		/// </summary>
+		/// <returns></returns>
+		/// <param name="key">Key.</param>
         protected override bool LoadItemFactory(string key)
         {
             return true;
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dataList"></param>
+		/// <param name="periodTime"></param>
+		/// <returns></returns>
         protected override bool InitCache(List<ChatMessage> dataList, int periodTime)
         {
             bool result = false;
