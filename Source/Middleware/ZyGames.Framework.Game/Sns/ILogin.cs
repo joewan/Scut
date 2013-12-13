@@ -21,13 +21,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
+using System;
+
 namespace ZyGames.Framework.Game.Sns
 {
+    /// <summary>
+    /// 登录处理接口
+    /// </summary>
     public interface ILogin
     {
+        /// <summary>
+        /// 
+        /// </summary>
         string PassportID { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         string UserID { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         string Password { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         string SessionID { get; }
 
         /// <summary>
@@ -35,7 +52,10 @@ namespace ZyGames.Framework.Game.Sns
         /// </summary>
         /// <returns></returns>
         string GetRegPassport();
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         bool CheckLogin();
 
     }

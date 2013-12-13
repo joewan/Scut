@@ -233,6 +233,7 @@ function releaseResource()
 	MainHelper.releaseReportLayer()
 	--结束计时器
 --	CCScheduler:sharedScheduler():unscheduleScriCCPointFunc("MainDesk.timeElapse")
+	CCDirector:sharedDirector():getScheduler():unscheduleScriptEntry(schedulerEntry1)
 	--释放牌组
 	releaseCardLayer()
 	sendState=nil;----用来判断现在是否在聊天界面--true未不在聊天界面
@@ -280,7 +281,7 @@ function onTouch(eventType , x, y)
         return touchBegan(x,y)
     elseif eventType == "moved" then
         return touchMoved(x,y)
-    elseif eventType == "end" then 
+    elseif eventType == "ended" then 
         return touchEnd(x,y)
     end
 end 
@@ -290,9 +291,10 @@ function initScene()
 	if mScene then
 		return 
 	end
-	mScene = ScutScene:node()	
+	local scene = ScutScene:new()	
 	-- 注册网络回调
-	mScene:registerCallback("MainDesk.networkCallback")	
+	scene:registerCallback(networkCallback)	
+	mScene = scene.root
 	-- 添加背景
 	mLayer = CCLayer:create()
 	mScene:addChild(mLayer, 0)
@@ -316,7 +318,7 @@ function initScene()
 	mLayer:addChild(bgLayer,0)
 	
 	--创建底下 信息
-	local bottomLayer,label,info=MainHelper.createBottomLayer(mPersonalInfo,mRoomID)
+	local bottomLayer,label,info=MainHelper.createBottomLayer(mPersonalInfo,1001)
 	mBeiLabel=label
 	roomInfo=info	
 	mLayer:addChild(bottomLayer,0)
@@ -324,7 +326,8 @@ function initScene()
 	onetime=1
 	--创建头部组件
 	local topLayer=MainHelper.createTopMenu(mLayer)
---        CCScheduler:sharedScheduler():scheduleScriCCPointFunc("MainDesk.timeElapse", 1, false)
+    --CCScheduler:sharedScheduler():scheduleScriCCPointFunc("MainDesk.timeElapse", 1, false)
+	schedulerEntry1 = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(timeElapse, 1, false)
    	--
 	sendState=true;--用来判断是否不在聊天界面的
 	
@@ -380,6 +383,7 @@ function touchBegan(x, y)
 			break
 		end	
 		end
+	return 1
 --	end	
 
  --  end
@@ -391,6 +395,7 @@ end
 function touchMoved(e)
 --	 for k,v in ipairs(e) do
 		mTouchCCPointMove=true
+		return 1
 	-- end
 end
 

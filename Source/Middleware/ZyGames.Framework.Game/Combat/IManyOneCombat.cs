@@ -33,13 +33,13 @@ namespace ZyGames.Framework.Game.Combat
         /// <summary>
         /// 加入攻击方阵列
         /// </summary>
-        /// <param name="EmbattleQueue"></param>
+		/// <param name="combatGrid"></param>
         void AppendAttack(EmbattleQueue combatGrid);
 
         /// <summary>
         /// 加入防守方阵列
         /// </summary>
-        /// <param name="EmbattleQueue"></param>
+		/// <param name="combatGrid"></param>
         void SetDefend(EmbattleQueue combatGrid);
 
         /// <summary>

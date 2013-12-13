@@ -40,13 +40,20 @@ namespace ZyGames.Framework.Game.Cache
     {
         private string _cacheKey;
         private IDataContainer<T> _container;
-
+		/// <summary>
+		/// Initializes a new instance of the class.
+		/// </summary>
+		/// <param name="cacheKey">Cache key.</param>
         public ContextCacheSet(string cacheKey)
         {
             _container = CacheFactory.GetOrCreate<T>();
             _cacheKey = cacheKey;
         }
-
+		/// <summary>
+		/// Determines whether this instance is exist key the specified keys.
+		/// </summary>
+		/// <returns><c>true</c> if this instance is exist key the specified keys; otherwise, <c>false</c>.</returns>
+		/// <param name="keys">Keys.</param>
         public bool IsExistKey(params object[] keys)
         {
             BaseCollection collection;
@@ -58,7 +65,12 @@ namespace ZyGames.Framework.Game.Cache
             }
             return false;
         }
-
+		/// <summary>
+		/// Tries the add.
+		/// </summary>
+		/// <returns><c>true</c>, if add was tryed, <c>false</c> otherwise.</returns>
+		/// <param name="key">Key.</param>
+		/// <param name="t">T.</param>
         public bool TryAdd(string key, T t)
         {
             BaseCollection collection;
@@ -69,7 +81,10 @@ namespace ZyGames.Framework.Game.Cache
             }
             return false;
         }
-
+		/// <summary>
+		/// Gets the with the specified key.
+		/// </summary>
+		/// <param name="key">Key.</param>
         public T this[string key]
         {
             get
@@ -85,12 +100,17 @@ namespace ZyGames.Framework.Game.Cache
                 return default(T);
             }
         }
-
+		/// <summary>
+		/// Clear this instance.
+		/// </summary>
         public void Clear()
         {
             _container.TryRemove(_cacheKey, item => true);
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -21,12 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
+using System;
+using System.Net;
 using System.Web;
 
 namespace ZyGames.Framework.Game.Service
 {
     /// <summary>
-    /// 
+    /// Http流输出类
     /// </summary>
     public class HttpGameResponse : IGameResponse
     {
@@ -41,6 +43,7 @@ namespace ZyGames.Framework.Game.Service
         public HttpGameResponse(HttpResponse response)
         {
             _response = response;
+            _response.Charset = "unicode";
         }
 
         /// <summary>
@@ -55,6 +58,41 @@ namespace ZyGames.Framework.Game.Service
         /// 
         /// </summary>
         /// <param name="buffer"></param>
+        public void Write(byte[] buffer)
+        {
+            _response.OutputStream.Write(buffer, 0, buffer.Length);
+        }
+    }
+
+    /// <summary>
+    /// HttpListent流输出类
+    /// </summary>
+    public class HttpListentGameResponse : IGameResponse
+    {
+        private readonly HttpListenerResponse _response;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="response"></param>
+        public HttpListentGameResponse(HttpListenerResponse response)
+        {
+            _response = response;
+            response.ContentType = "application/octet-stream";
+            response.AddHeader("Access-Control-Allow-Origin", "*");
+        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="buffer"></param>
+        public void BinaryWrite(byte[] buffer)
+        {
+            _response.OutputStream.Write(buffer, 0, buffer.Length);
+        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="buffer"></param>
         public void Write(byte[] buffer)
         {
             _response.OutputStream.Write(buffer, 0, buffer.Length);

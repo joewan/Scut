@@ -38,15 +38,29 @@ namespace ZyGames.Framework.Game.Message
     {
         private static ShareCacheStruct<SensitiveWord> _cacheSet;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void LoadSchema()
+        {
+			try
+			{
+				SchemaTable schema;
+				if (EntitySchemaSet.TryGet<SensitiveWord>(out schema))
+				{
+					schema.ConnectionProviderType = ConfigManger.Provider.ConnectionSetting.ProviderTypeName;
+                    schema.ConnectionString = ConfigManger.Provider.ConnectionString;
+				}
+			}
+			catch(Exception ex)
+			{
+				ZyGames.Framework.Common.Log.TraceLog.WriteError ("Load SensitiveWord schema error:{0}", ex);
+			}
+        }
+
         static SensitiveWordService()
         {
             _cacheSet = new ShareCacheStruct<SensitiveWord>();
-            SchemaTable schema;
-            if (EntitySchemaSet.TryGet<SensitiveWord>(out schema))
-            {
-                schema.ConnectionType = "";
-                schema.ConnectionString = ConfigManger.connectionString;
-            }
         }
 
         private List<SensitiveWord> _wordList;
@@ -85,7 +99,7 @@ namespace ZyGames.Framework.Game.Message
         /// <param name="str"></param>
         /// <param name="replaceChar">替换的字符</param>
         /// <returns></returns>
-        public string Filter(string str, char replaceChar='*')
+        public string Filter(string str, char replaceChar = '*')
         {
             if (string.IsNullOrEmpty(str))
             {

@@ -112,6 +112,15 @@ namespace ZyGames.Framework.Game.Message
         }
 
         /// <summary>
+        /// 移除消息
+        /// </summary>
+        /// <param name="match"></param>
+        /// <returns></returns>
+        public bool Remove(Predicate<NoticeMessage> match)
+        {
+            return _timer.Remove(match);
+        }
+        /// <summary>
         /// 定时发送
         /// </summary>
         /// <param name="message">消息对象</param>
@@ -155,7 +164,10 @@ namespace ZyGames.Framework.Game.Message
             }
             return GetRange(msgList, maxCount);
         }
-
+		/// <summary>
+		/// Timers the callback.
+		/// </summary>
+		/// <param name="message">Message.</param>
         protected void TimerCallback(NoticeMessage message)
         {
             Send(Create(message.NoticeType, message.Content, message.Title, message.ExpiryDate));
@@ -192,7 +204,10 @@ namespace ZyGames.Framework.Game.Message
             }
             return false;
         }
-
+		/// <summary>
+		/// Sets the version identifier.
+		/// </summary>
+		/// <param name="versionId">Version identifier.</param>
         protected abstract void SetVersionId(int versionId);
 
         /// <summary>

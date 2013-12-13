@@ -26,6 +26,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ProtoBuf;
 using ZyGames.Framework.Common;
 using ZyGames.Framework.Game.Com.Model;
 using ZyGames.Framework.Game.Context;
@@ -35,12 +36,17 @@ namespace ZyGames.Framework.Game.Com.Mall
     /// <summary>
     /// 商家
     /// </summary>
+    [Serializable, ProtoContract]
     public class Merchant
     {
         private readonly int _merchantId;
         private readonly MallController _controller;
         private List<GoodsData> _goodsList = new List<GoodsData>();
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Com.Mall.Merchant"/> class.
+		/// </summary>
+		/// <param name="merchantId">Merchant identifier.</param>
+		/// <param name="controller">Controller.</param>
         public Merchant(int merchantId, MallController controller)
         {
             if (controller == null)

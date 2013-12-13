@@ -22,17 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 using System;
-using System.Security.Cryptography;
-using System.Text;
 using System.Web;
 using ZyGames.Framework.Common.Log;
 using ZyGames.Framework.Common.Serialization;
+using ZyGames.Framework.Game.Configuration;
 using ZyGames.Framework.Game.Context;
-using ZyGames.Framework.Game.Sns._91sdk;
-using ZyGames.Framework.Game.Sns.Section;
 
 namespace ZyGames.Framework.Game.Sns
 {
+	/// <summary>
+	/// Login360_ v2.
+	/// </summary>
     public class Login360_V2 : AbstractLogin
     {
         private string _retailID = string.Empty;
@@ -44,28 +44,35 @@ namespace ZyGames.Framework.Game.Sns
         private string Url = string.Empty;
         private string _aceessTokenUrl = string.Empty;
         private string _appSecret = string.Empty;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.Login360_V2"/> class.
+		/// </summary>
+		/// <param name="retailID">Retail I.</param>
+		/// <param name="retailUser">Retail user.</param>
+		/// <param name="pid">Pid.</param>
+		/// <param name="code">Code.</param>
         public Login360_V2(string retailID, string retailUser, string pid, string code)
         {
             this._retailID = retailID;
             this._pid = pid;
             this._retailUser = retailUser;
             this._code = code;
-            var sec = SdkSectionFactory.Section360;
-            if (sec != null)
+            GameChannel gameChannel = ZyGameBaseConfigManager.GameSetting.GetChannelSetting(ChannelType.channelMIUI);
+            if (gameChannel != null)
             {
-                var els = sec.Channels[retailID];
-                if (els == null)
+                Url = gameChannel.Url;
+                _aceessTokenUrl = gameChannel.TokenUrl;
+                GameSdkSetting setting = gameChannel.GetSetting(retailID);
+                if (setting != null)
                 {
-                    TraceLog.ReleaseWrite("The sdkChannel section channel360:{0} is null.", retailID);
+                    AppId = setting.AppId;
+                    AppKey = setting.AppKey;
+                    _appSecret = setting.AppSecret;
                 }
                 else
                 {
-                    Url = sec.Url;
-                    AppId = els.AppId;
-                    AppKey = els.AppKey;
-                    _aceessTokenUrl = sec.AceessTokenUrl;
-                    _appSecret = els.AppSecret;
-                   
+                    TraceLog.ReleaseWrite("The sdkChannel section channel360:{0} is null.", retailID);
                 }
             }
             else
@@ -74,28 +81,18 @@ namespace ZyGames.Framework.Game.Sns
             }
         }
 
-
-        protected static string GetSessionId()
-        {
-            string sessionId = string.Empty;
-            if (HttpContext.Current != null && HttpContext.Current.Session != null)
-            {
-                sessionId = HttpContext.Current.Session.SessionID;
-            }
-            else
-            {
-                sessionId = System.Guid.NewGuid().ToString().Replace("-", string.Empty);
-            }
-            return sessionId;
-        }
-
-       
-
+		/// <summary>
+		/// 注册通行证
+		/// </summary>
+		/// <returns></returns>
         public override string GetRegPassport()
         {
             return this.PassportID;
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
         public override bool CheckLogin()
         {
 
@@ -128,7 +125,7 @@ namespace ZyGames.Framework.Game.Sns
                 AccessToken
             );
 
-            string result = HttpRequestManager.GetStringData(urlData,"GET");
+            string result = HttpRequestManager.GetStringData(urlData, "GET");
             try
             {
                 if (!string.IsNullOrEmpty(result))
@@ -158,28 +155,89 @@ namespace ZyGames.Framework.Game.Sns
                 return false;
             }
         }
-
+		
+		/// <summary>
+		/// SDK360Error.
+		/// </summary>
         public class SDK360Error
         {
+			/// <summary>
+			/// Gets or sets the error_code.
+			/// </summary>
+			/// <value>The error_code.</value>
             public string error_code { get; set; }
+			/// <summary>
+			/// Gets or sets the error.
+			/// </summary>
+			/// <value>The error.</value>
             public string error { get; set; }
+			/// <summary>
+			/// Gets or sets the identifier.
+			/// </summary>
+			/// <value>The identifier.</value>
             public string id { get; set; }
+			/// <summary>
+			/// Gets or sets the name.
+			/// </summary>
+			/// <value>The name.</value>
             public string name { get; set; }
+			/// <summary>
+			/// Gets or sets the avatar.
+			/// </summary>
+			/// <value>The avatar.</value>
             public string avatar { get; set; }
+			/// <summary>
+			/// Gets or sets the sex.
+			/// </summary>
+			/// <value>The sex.</value>
             public string sex { get; set; }
+			/// <summary>
+			/// Gets or sets the area.
+			/// </summary>
+			/// <value>The area.</value>
             public string area { get; set; }
+			/// <summary>
+			/// Gets or sets the nick.
+			/// </summary>
+			/// <value>The nick.</value>
             public string nick { get; set; }
         }
-
+		/// <summary>
+		/// SDK360GetTokenError.
+		/// </summary>
         public class SDK360GetTokenError
         {
+			/// <summary>
+			/// Gets or sets the error_code.
+			/// </summary>
+			/// <value>The error_code.</value>
             public string error_code { get; set; }
+			/// <summary>
+			/// Gets or sets the error.
+			/// </summary>
+			/// <value>The error.</value>
             public string error { get; set; }
+			/// <summary>
+			/// Gets or sets the access_token.
+			/// </summary>
+			/// <value>The access_token.</value>
             public string access_token { get; set; }
+			/// <summary>
+			/// Gets or sets the expires_in.
+			/// </summary>
+			/// <value>The expires_in.</value>
             public string expires_in { get; set; }
+			/// <summary>
+			/// Gets or sets the refresh_token.
+			/// </summary>
+			/// <value>The refresh_token.</value>
             public string refresh_token { get; set; }
+			/// <summary>
+			/// Gets or sets the scope.
+			/// </summary>
+			/// <value>The scope.</value>
             public string scope { get; set; }
- 
+
         }
     }
 }

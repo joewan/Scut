@@ -31,20 +31,46 @@ using System.Xml;
 
 namespace ZyGames.Framework.Game.Runtime
 {
+	/// <summary>
+	/// Http request.
+	/// </summary>
     public class HttpRequest
     {
+		/// <summary>
+		/// The content type xml.
+		/// </summary>
         public const string ContentTypeXml = "application/xml";
-
+		/// <summary>
+		/// Get the specified contentType, url, paramData and successHandle.
+		/// </summary>
+		/// <param name="contentType">Content type.</param>
+		/// <param name="url">URL.</param>
+		/// <param name="paramData">Parameter data.</param>
+		/// <param name="successHandle">Success handle.</param>
         public void Get(string contentType, string url, string paramData, Func<Stream, bool> successHandle)
         {
             Send("GET", contentType, url, paramData, Encoding.UTF8, successHandle);
         }
-
+		/// <summary>
+		/// Post the specified contentType, url, paramData and successHandle.
+		/// </summary>
+		/// <param name="contentType">Content type.</param>
+		/// <param name="url">URL.</param>
+		/// <param name="paramData">Parameter data.</param>
+		/// <param name="successHandle">Success handle.</param>
         public void Post(string contentType, string url, string paramData, Func<Stream, bool> successHandle)
         {
             Send("POST", contentType, url, paramData, Encoding.UTF8, successHandle);
         }
-
+		/// <summary>
+		/// Send the specified methodType, contentType, url, paramData, encoding and successHandle.
+		/// </summary>
+		/// <param name="methodType">Method type.</param>
+		/// <param name="contentType">Content type.</param>
+		/// <param name="url">URL.</param>
+		/// <param name="paramData">Parameter data.</param>
+		/// <param name="encoding">Encoding.</param>
+		/// <param name="successHandle">Success handle.</param>
         public bool Send(string methodType, string contentType, string url, string paramData, Encoding encoding, Func<Stream, bool> successHandle)
         {
             byte[] bytesRequestData = encoding.GetBytes(paramData);

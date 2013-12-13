@@ -29,8 +29,15 @@ using System.Text;
 
 namespace ZyGames.Framework.Game.Pay.Section
 {
+	/// <summary>
+	/// App store factory.
+	/// </summary>
     public static class AppStoreFactory
     {
+		/// <summary>
+		/// Gets the pay section.
+		/// </summary>
+		/// <returns>The pay section.</returns>
         public static AppStorePaySection GetPaySection()
         {
             return GetPaySection("appStorePay");

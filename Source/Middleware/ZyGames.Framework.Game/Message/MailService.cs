@@ -36,8 +36,13 @@ namespace ZyGames.Framework.Game.Message
     /// </summary>
     public abstract class MailService<T> where T : MailMessage, new()
     {
+		/// <summary>
+		/// The mail cache set.
+		/// </summary>
         protected PersonalCacheStruct<T> MailCacheSet;
-
+		/// <summary>
+		/// Initializes a new instance of the class.
+		/// </summary>
         protected MailService()
         {
             MailCacheSet = new PersonalCacheStruct<T>();

@@ -22,9 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ZyGames.Framework.Common.Log;
 
 namespace ProxyServer
 {
@@ -32,10 +30,17 @@ namespace ProxyServer
     {
         static void Main(string[] args)
         {
-            var server = new GameProxy();
-
-            Console.WriteLine("按任意键退出...");
-            Console.ReadLine();
+            try
+            {
+                GameServerListManager.Initialize();
+                var server = new GameProxy();
+				Console.WriteLine("Press Enter to exit...");
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+			{
+                TraceLog.WriteError("Main error:{0}", ex);
+            }
         }
     }
 }

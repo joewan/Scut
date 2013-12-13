@@ -1,4 +1,27 @@
-﻿using System;
+﻿/****************************************************************************
+Copyright (c) 2013-2015 scutgame.com
+
+http://www.scutgame.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Web.Caching;
 using ZyGames.Framework.Cache;
@@ -24,20 +47,28 @@ namespace ZyGames.Framework.Game.Cache
 
         static BroadcastCacheSet()
         {
-            MessageMaxCount = ConfigUtils.GetSetting("broadcastcache_maxcount", "1000").ToInt();
-            Timeout = ConfigUtils.GetSetting("broadcastcache_timeout", "1800").ToInt();
+            MessageMaxCount = ConfigUtils.GetSetting("broadcastcache_maxcount", 1000);
+            Timeout = ConfigUtils.GetSetting("broadcastcache_timeout", 1800);
         }
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Cache.BroadcastCacheSet"/> class.
+		/// </summary>
         public BroadcastCacheSet()
             : this("10000")
         {
         }
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Cache.BroadcastCacheSet"/> class.
+		/// </summary>
+		/// <param name="groupKey">Group key.</param>
         public BroadcastCacheSet(string groupKey)
         {
             _groupKey = groupKey;
         }
-
+		/// <summary>
+		/// Gets the broadcast.
+		/// </summary>
+		/// <returns>The broadcast.</returns>
         public NoticeMessage[] GetBroadcast()
         {
             CacheQueue<NoticeMessage> cacheQueue;
@@ -47,14 +78,22 @@ namespace ZyGames.Framework.Game.Cache
             }
             return new NoticeMessage[0];
         }
-
+		/// <summary>
+		/// Send the specified message.
+		/// </summary>
+		/// <param name="message">Message.</param>
         public void Send(NoticeMessage message)
         {
             if (DataContainer.TryAddQueue(_groupKey, message, 0, OnExpired))
             {
             }
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dataList"></param>
+		/// <param name="periodTime"></param>
+		/// <returns></returns>
         protected override bool InitCache(List<NoticeMessage> dataList, int periodTime)
         {
             bool result = false;
@@ -91,53 +130,6 @@ namespace ZyGames.Framework.Game.Cache
             }
             return true;
         }
-        /****************************************************************************
-Copyright (c) 2013-2015 scutgame.com
-
-http://www.scutgame.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-
-        /****************************************************************************
-Copyright (c) 2013-2015 scutgame.com
-
-http://www.scutgame.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-
+       
     }
 }

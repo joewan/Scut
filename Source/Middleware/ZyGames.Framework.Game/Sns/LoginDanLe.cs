@@ -30,21 +30,27 @@ using System.Web;
 using ZyGames.Framework.Common.Log;
 using ZyGames.Framework.Common.Security;
 using ZyGames.Framework.Common.Serialization;
+using ZyGames.Framework.Game.Configuration;
 using ZyGames.Framework.Game.Runtime;
-using ZyGames.Framework.Game.Sns.Section;
 
 namespace ZyGames.Framework.Game.Sns
 {
     /// <summary>
     /// 当乐0037
     /// </summary>
-    public class LoginDanLe : ILogin
+    public class LoginDanLe : AbstractLogin
     {
         private string _retailID;
         private string _mid;
         private string _token;
         private string username = string.Empty;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.LoginDanLe"/> class.
+		/// </summary>
+		/// <param name="retailID">Retail I.</param>
+		/// <param name="retailUser">Retail user.</param>
+		/// <param name="password">Password.</param>
+		/// <param name="passportId">Passport identifier.</param>
         public LoginDanLe(string retailID, string retailUser, string password, string passportId)
         {
             this._retailID = retailID;
@@ -52,7 +58,12 @@ namespace ZyGames.Framework.Game.Sns
             this.username = HttpUtility.UrlEncode(retailUser, Encoding.UTF8).ToUpper();
             _mid = passportId.Equals("0") ? string.Empty : passportId;
         }
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.LoginDanLe"/> class.
+		/// </summary>
+		/// <param name="retailID">Retail I.</param>
+		/// <param name="mid">Middle.</param>
+		/// <param name="token">Token.</param>
         public LoginDanLe(string retailID, string mid, string token)
         {
             this._retailID = retailID ?? "0037";
@@ -60,65 +71,35 @@ namespace ZyGames.Framework.Game.Sns
             _token = token;
         }
 
-        #region ILogin 成员
-
-        public string UserID
-        {
-            get;
-            set;
-        }
-
-        public string PassportID
-        {
-            get;
-            set;
-        }
-
-        public string Password
-        {
-            get;
-            set;
-        }
-
-        public string SessionID
-        {
-            get;
-            set;
-        }
-
-        protected static string GetSessionId()
-        {
-            string sessionId = string.Empty;
-            if (HttpContext.Current != null && HttpContext.Current.Session != null)
-            {
-                sessionId = HttpContext.Current.Session.SessionID;
-            }
-            else
-            {
-                sessionId = System.Guid.NewGuid().ToString().Replace("-", string.Empty);
-            }
-            return sessionId;
-        }
-
-        public string GetRegPassport()
+		/// <summary>
+		/// 注册通行证
+		/// </summary>
+		/// <returns></returns>
+        public override string GetRegPassport()
         {
             return this.PassportID;
         }
-
-        public bool CheckLogin()
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+        public override bool CheckLogin()
         {
             string url = "";
             string AppKey = "";
             string AppId = "";
             bool isOldVersion = false;
-            var sec = SdkSectionFactory.SectionDanle;
-            if (sec != null)
+            GameChannel gameChannel = ZyGameBaseConfigManager.GameSetting.GetChannelSetting(ChannelType.channelMIUI);
+            if (gameChannel != null)
             {
-                url = sec.Url;
-                isOldVersion = sec.IsOldVersion;
-                var els = sec.Channels[_retailID];
-                AppKey = els.AppKey;
-                AppId = els.AppId;
+                url = gameChannel.Url;
+                isOldVersion = "0.1".Equals(gameChannel.Version);
+                GameSdkSetting setting = gameChannel.GetSetting(_retailID);
+                if (setting != null)
+                {
+                    AppKey = setting.AppKey;
+                    AppId = setting.AppId;
+                }
             }
             else
             {
@@ -168,39 +149,53 @@ namespace ZyGames.Framework.Game.Sns
             return true;
         }
 
-        #endregion
 
-        private string AMD5(string str1)
-        {
-            return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str1, "MD5").ToUpper();
-        }
-
-        private string SHA256(string str)
-        {
-            byte[] tmpByte;
-            SHA256 sha256 = new SHA256Managed();
-            tmpByte = sha256.ComputeHash(Encoding.UTF8.GetBytes(str));
-            sha256.Clear();
-            string result = string.Empty;
-            foreach (byte x in tmpByte)
-            {
-                result += string.Format("{0:x2}", x);
-            }
-            return result.ToUpper();
-        }
     }
 
+	/// <summary>
+	/// Danle SD.
+	/// </summary>
     public class DanleSDK
     {
+		/// <summary>
+		/// The member identifier.
+		/// </summary>
         public string memberId;
+		/// <summary>
+		/// The username.
+		/// </summary>
         public string username;
+		/// <summary>
+		/// The nickname.
+		/// </summary>
         public string nickname;
+		/// <summary>
+		/// The gender.
+		/// </summary>
         public string gender;
+		/// <summary>
+		/// The level.
+		/// </summary>
         public int level;
+		/// <summary>
+		/// The avatar_url.
+		/// </summary>
         public string avatar_url;
+		/// <summary>
+		/// The created_date.
+		/// </summary>
         public string created_date;
+		/// <summary>
+		/// The token.
+		/// </summary>
         public string token;
+		/// <summary>
+		/// The error_code.
+		/// </summary>
         public int error_code;
+		/// <summary>
+		/// The error_msg.
+		/// </summary>
         public string error_msg;
     }
 }

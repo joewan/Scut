@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ProtoBuf;
 using ZyGames.Framework.Cache.Generic;
 using ZyGames.Framework.Common.Log;
 using ZyGames.Framework.Game.Com.Model;
@@ -34,10 +35,14 @@ namespace ZyGames.Framework.Game.Com.Generic
     /// <summary>
     /// 新手引导
     /// </summary>
+    [Serializable, ProtoContract]
     public abstract class NoviceGuide<T, V>
         where T : UserGuide, new()
         where V : GuideData, new()
     {
+		/// <summary>
+		/// The user identifier.
+		/// </summary>
         protected readonly int UserId;
         private ShareCacheStruct<V> _guideSet;
         private T _userGuide;

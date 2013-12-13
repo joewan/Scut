@@ -23,6 +23,10 @@ THE SOFTWARE.
 ****************************************************************************/
 using System;
 using System.Configuration;
+using ZyGames.Framework.Common;
+using ZyGames.Framework.Common.Configuration;
+using ZyGames.Framework.Common.Log;
+using ZyGames.Framework.Game.Configuration;
 
 namespace ZyGames.Framework.Game.Command
 {
@@ -33,43 +37,71 @@ namespace ZyGames.Framework.Game.Command
     {
         private const string SectionName = "zyGameBase-GM";
 
-        private static bool EnableGM { get; set; }
+        private static bool EnableGM;
 
         static BaseCommand()
         {
-            EnableGM = false;
-            string str = ConfigurationManager.AppSettings["EnableGM"];
-            if (!string.IsNullOrEmpty(str))
-            {
-                EnableGM = Convert.ToBoolean(str);
-            }
+            EnableGM = ConfigUtils.GetSetting("EnableGM", false);
         }
 
-        public static void Run(string userID, string command)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public static bool Check(string command)
+        {
+            return command.StartsWith("gm:", StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        /// <summary>
+        /// 运行GM命令解析
+        /// </summary>
+        /// <param name="userId">发送GM命令者</param>
+        /// <param name="command">GM命令</param>
+        /// <param name="assemblyName">指定解析的程序集</param>
+        public static void Run(string userId, string command, string assemblyName = "")
         {
             try
             {
-                if (!EnableGM) throw new Exception("GM命令未开启暂不能使用！");
+                if (!EnableGM)
+                {
+                    return;
+                }
 
                 command = command != null ? command.Trim() : string.Empty;
                 string[] paramList = command.Split(new char[] { ' ' });
                 if (paramList.Length < 1)
                 {
-                    throw new Exception("无效参数");
+                    return;
                 }
 
-                string cmd = paramList[0].Replace("GM:", "").Trim();
+                string cmd = paramList[0].Trim();
+                if (cmd.Length > 3)
+                {
+                    cmd = cmd.Substring(3, cmd.Length - 3);
+                }
+
                 string[] args = new string[0];
                 if (paramList.Length > 1)
                 {
                     args = paramList[1].Split(new char[] { ',' });
                 }
-                BaseCommand baseCommand = CreateCommand(cmd);
-                if (baseCommand != null)
+                BaseCommand baseCommand = null;
+                if (string.IsNullOrEmpty(assemblyName))
                 {
-                    baseCommand.UserID = userID;
-                    baseCommand.ProcessCmd(args);
+                    baseCommand = new ScriptCommand(cmd);
                 }
+                else
+                {
+                    baseCommand = CreateCommand(cmd, assemblyName);
+                }
+                if (baseCommand == null)
+                {
+                    return;
+                }
+                baseCommand.UserID = userId;
+                baseCommand.ProcessCmd(args);
             }
             catch (Exception ex)
             {
@@ -77,34 +109,57 @@ namespace ZyGames.Framework.Game.Command
             }
         }
 
-        private static BaseCommand CreateCommand(string cmd)
+        private static BaseCommand CreateCommand(string cmd, string assemblyName)
         {
-            CommandCollection cmdList = ((GmSection)ConfigurationManager.GetSection(SectionName)).Command;
-            CommandElement cmdElement = cmdList[cmd];
-            if (cmdElement == null)
+            string typeName = "";
+            if (ZyGameBaseConfigManager.GameSetting.HasSetting)
             {
-                throw new Exception("[" + cmd + "]找不到处理器");
+                typeName = ZyGameBaseConfigManager.GameSetting.GetGmCommandType(cmd);
+                typeName = !string.IsNullOrEmpty(typeName) ? typeName : cmd + "Command";
+            }
+            else
+            {
+                CommandCollection cmdList = ((GmSection) ConfigurationManager.GetSection(SectionName)).Command;
+                CommandElement cmdElement = cmdList[cmd];
+                typeName = cmdElement != null ? cmdElement.TypeName : cmd + "Command";
             }
 
-            return (BaseCommand)Activator.CreateInstance(Type.GetType(cmdElement.TypeName));
+            if (typeName.IndexOf(",") == -1)
+            {
+                typeName = string.Format("{0}.{1},{0}", assemblyName, typeName);
+            }
+            var type = Type.GetType(typeName, false, true);
+            if (type != null)
+            {
+                return type.CreateInstance<BaseCommand>();
+            }
+            return null;
         }
 
 
         private static void ErrorFormat(string command, Exception ex)
         {
-            throw new Exception(string.Format("GM命令:{0}执行失败", command), ex);
+            TraceLog.WriteError("GM命令:{0}执行失败\r\nException:{1}", command, ex);
         }
-
-        public BaseCommand()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Command.BaseCommand"/> class.
+		/// </summary>
+        protected BaseCommand()
         {
         }
-
+		/// <summary>
+		/// Gets or sets the user I.
+		/// </summary>
+		/// <value>The user I.</value>
         public string UserID
         {
             get;
             set;
         }
-
+		/// <summary>
+		/// Processes the cmd.
+		/// </summary>
+		/// <param name="args">Arguments.</param>
         protected abstract void ProcessCmd(string[] args);
 
     }

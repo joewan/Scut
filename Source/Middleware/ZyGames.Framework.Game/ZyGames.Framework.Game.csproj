@@ -10,9 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZyGames.Framework.Game</RootNamespace>
     <AssemblyName>ZyGames.Framework.Game</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,50 +31,46 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>bin\Release\ZyGames.Framework.Game.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IronPython, Version=2.6.30207.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\IronPython.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython.Modules">
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\IronPython.Modules.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Dynamic, Version=1.0.30207.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\Microsoft.Dynamic.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting, Version=1.0.30207.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\Microsoft.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZyGames.Framework">
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\ZyGames.Framework.dll</HintPath>
+    <Reference Include="System.Configuration" />
+    <Reference Include="IronPython">
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules">
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamic">
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="ZyGames.Framework.Common">
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\ZyGames.Framework.Common.dll</HintPath>
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\ZyGames.Framework.Common.dll</HintPath>
     </Reference>
-    <Reference Include="ZyGames.Framework.Plugin">
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\ZyGames.Framework.Plugin.dll</HintPath>
-    </Reference>
-    <Reference Include="ZyGames.Framework.RPC">
-      <HintPath>..\..\..\Release\5.1.3.1\Lib\ZyGames.Framework.RPC.dll</HintPath>
+    <Reference Include="ZyGames.Framework">
+      <HintPath>..\..\..\Release\6.0.5.1\Lib\ZyGames.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +92,7 @@
     <Compile Include="Command\CommandCollection.cs" />
     <Compile Include="Command\CommandElement.cs" />
     <Compile Include="Command\GmSection.cs" />
+    <Compile Include="Command\ScriptCommand.cs" />
     <Compile Include="Com\Exam\AbstractExam.cs" />
     <Compile Include="Com\ComConfig.cs" />
     <Compile Include="Com\ComManager.cs" />
@@ -124,6 +122,10 @@
     <Compile Include="Com\Rank\RankingFactory.cs" />
     <Compile Include="Com\RankingProxy.cs" />
     <Compile Include="Configuration\CombatElement.cs" />
+    <Compile Include="Configuration\GameChannel.cs" />
+    <Compile Include="Configuration\GameConfigSetting.cs" />
+    <Compile Include="Configuration\GameLoginSetting.cs" />
+    <Compile Include="Configuration\GameSdkSetting.cs" />
     <Compile Include="Configuration\LoginElement.cs" />
     <Compile Include="Configuration\RetailCollection.cs" />
     <Compile Include="Configuration\RetailElement.cs" />
@@ -133,6 +135,30 @@
     <Compile Include="Context\EncryptionManager.cs" />
     <Compile Include="Context\GameContext.cs" />
     <Compile Include="Context\HttpRequestManager.cs" />
+    <Compile Include="Contract\ActionFactory.cs" />
+    <Compile Include="Contract\Action\AndroidPayAction.cs" />
+    <Compile Include="Contract\Action\AppStoreDetailAction.cs" />
+    <Compile Include="Contract\Action\AppStorePayAction.cs" />
+    <Compile Include="Contract\Action\AuthorizeAction.cs" />
+    <Compile Include="Contract\Action\LoginAction.cs" />
+    <Compile Include="Contract\Action\LoginExtendAction.cs" />
+    <Compile Include="Contract\Action\PayNormalAction.cs" />
+    <Compile Include="Contract\Action\ReAccessTokenAction.cs" />
+    <Compile Include="Contract\Action\RegisterAction.cs" />
+    <Compile Include="Contract\Action\ScriptAction.cs" />
+    <Compile Include="Contract\Action\Sdk91PayAction.cs" />
+    <Compile Include="Contract\GameHostSetting.cs" />
+    <Compile Include="Contract\GameSession.cs" />
+    <Compile Include="Contract\GameSocketHost.cs" />
+    <Compile Include="Contract\Page\RankingPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Lang\BaseBIG5Language.cs" />
+    <Compile Include="Lang\BaseENLanguage.cs" />
+    <Compile Include="Lang\BaseKoreanLanguage.cs" />
+    <Compile Include="Lang\BaseZHLanguage.cs" />
+    <Compile Include="Lang\ILanguage.cs" />
+    <Compile Include="Lang\LanguageHelper.cs" />
     <Compile Include="Message\BroadcastService.cs" />
     <Compile Include="Message\BroadcastTimer.cs" />
     <Compile Include="Message\MailMessage.cs" />
@@ -143,9 +169,6 @@
     <Compile Include="Message\SensitiveWordService.cs" />
     <Compile Include="Model\RgbColor.cs" />
     <Compile Include="Model\EmbattleQueue.cs" />
-    <Compile Include="Model\EntityIndex.cs" />
-    <Compile Include="Model\EntityIndexList.cs" />
-    <Compile Include="Model\EntityIndexManager.cs" />
     <Compile Include="Pay\FeedbackInfo.cs" />
     <Compile Include="Pay\PayOperator.cs" />
     <Compile Include="Pay\Section\AppStoreFactory.cs" />
@@ -153,42 +176,14 @@
     <Compile Include="Pay\Section\AppStorePayElement.cs" />
     <Compile Include="Pay\Section\AppStorePaySection.cs" />
     <Compile Include="Runtime\HttpRequest.cs" />
-    <Compile Include="Script\PythonScriptManager.cs" />
     <Compile Include="Service\HttpGameResponse.cs" />
     <Compile Include="Service\LoginStatus.cs" />
-    <Compile Include="Service\ScriptRoute.cs" />
     <Compile Include="Service\SocketGameResponse.cs" />
     <Compile Include="Sns\AbstractLogin.cs" />
     <Compile Include="Sns\LoginDanLeV2.cs" />
     <Compile Include="Sns\LoginGFan.cs" />
-    <Compile Include="Sns\Section\Channel360Collection.cs" />
-    <Compile Include="Sns\Section\Channel360Element.cs" />
-    <Compile Include="Sns\Section\Channel91Element.cs" />
-    <Compile Include="Sns\Section\Channel91Collection.cs" />
-    <Compile Include="Sns\Section\ChannelDanleV2Collection.cs" />
-    <Compile Include="Sns\Section\ChannelDanleV2Element.cs" />
-    <Compile Include="Sns\Section\ChannelGFanCollection.cs" />
-    <Compile Include="Sns\Section\ChannelGFanElement.cs" />
-    <Compile Include="Sns\Section\SdkChannelSection.cs" />
-    <Compile Include="Sns\Section\SdkSectionFactory.cs" />
-    <Compile Include="Sns\Section\Section360Element.cs" />
-    <Compile Include="Sns\Section\Section91Element.cs" />
-    <Compile Include="Sns\Section\ChannelUCCollection.cs" />
-    <Compile Include="Sns\Section\ChannelUCElement.cs" />
-    <Compile Include="Sns\Section\SectionDanleV2Element.cs" />
-    <Compile Include="Sns\Section\SectionGFanElement.cs" />
-    <Compile Include="Sns\Section\SectionUCElement.cs" />
-    <Compile Include="Sns\Section\ChannelDanleCollection.cs" />
-    <Compile Include="Sns\Section\ChannelDanleElement.cs" />
-    <Compile Include="Sns\Section\SectionDanleElement.cs" />
-    <Compile Include="Sns\Section\Channel10086Collection.cs" />
-    <Compile Include="Sns\Section\Channel10086Element.cs" />
-    <Compile Include="Sns\Section\Section10086Element.cs" />
     <Compile Include="Sns\Login360_V2.cs" />
     <Compile Include="Sns\LoginMIUI.cs" />
-    <Compile Include="Sns\Section\ChannelMIUICollection.cs" />
-    <Compile Include="Sns\Section\ChannelMIUIElement.cs" />
-    <Compile Include="Sns\Section\SectionMIUIElement.cs" />
     <Compile Include="Task\ITaskItem.cs" />
     <Compile Include="Model\IGeneral.cs" />
     <Compile Include="Message\NoticeMessage.cs" />
@@ -209,7 +204,7 @@
     <Compile Include="Service\MobileType.cs" />
     <Compile Include="Sns\91sdk\HttpPostManager.cs" />
     <Compile Include="Sns\91sdk\Login91sdk.cs" />
-    <Compile Include="Sns\config.cs" />
+    <Compile Include="Sns\ConnectManager.cs" />
     <Compile Include="Sns\ILogin.cs" />
     <Compile Include="Sns\Login360.cs" />
     <Compile Include="Sns\Login36you.cs" />
@@ -224,12 +219,6 @@
     <Compile Include="Task\TaskService.cs" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\ZyGames.Framework.Game.Lang\ZyGames.Framework.Game.Lang.csproj">
-      <Project>{AEC0670E-3672-4D32-9B2A-5B1C19AB1C4D}</Project>
-      <Name>ZyGames.Framework.Game.Lang</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

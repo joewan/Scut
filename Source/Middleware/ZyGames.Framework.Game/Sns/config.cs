@@ -30,10 +30,16 @@ using ZyGames.Framework.Game.Runtime;
 
 namespace ZyGames.Framework.Game.Sns
 {
+	/// <summary>
+	/// Config.
+	/// </summary>
     public class config
     {
         private static string _connectionString = string.Empty;
-
+		/// <summary>
+		/// Gets the connection string.
+		/// </summary>
+		/// <value>The connection string.</value>
         public static string connectionString
         {
             get

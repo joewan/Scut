@@ -43,15 +43,29 @@ namespace ZyGames.Framework.Game.Cache
     /// </summary>
     public class WhisperCacheSet : ShareCacheStruct<ChatMessage>
     {
+		/// <summary>
+		/// 加载数据工厂
+		/// </summary>
+		/// <returns></returns>
         protected override bool LoadFactory()
         {
             return true;
         }
-
+		/// <summary>
+		/// 加载子项数据工厂
+		/// </summary>
+		/// <returns></returns>
+		/// <param name="key">Key.</param>
         protected override bool LoadItemFactory(string key)
         {
             return true;
         }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dataList"></param>
+		/// <param name="periodTime"></param>
+		/// <returns></returns>
         protected override bool InitCache(List<ChatMessage> dataList, int periodTime)
         {
             bool result = false;

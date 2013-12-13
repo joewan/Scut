@@ -24,6 +24,7 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ProtoBuf;
 using ZyGames.Framework.Common;
 using ZyGames.Framework.Game.Com.Model;
 using ZyGames.Framework.Game.Context;
@@ -33,10 +34,14 @@ namespace ZyGames.Framework.Game.Com.Mall
     /// <summary>
     /// 商场管理员
     /// </summary>
+    [Serializable, ProtoContract]
     public abstract class MallController
     {
         private readonly ITrade _tradeStrategy;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Com.Mall.MallController"/> class.
+		/// </summary>
+		/// <param name="tradeStrategy">Trade strategy.</param>
         protected MallController(ITrade tradeStrategy)
         {
             _tradeStrategy = tradeStrategy;
@@ -78,7 +83,14 @@ namespace ZyGames.Framework.Game.Com.Mall
             return result;
         }
 
-
+		/// <summary>
+		/// Trades the goods.
+		/// </summary>
+		/// <returns><c>true</c>, if goods was traded, <c>false</c> otherwise.</returns>
+		/// <param name="user">User.</param>
+		/// <param name="goods">Goods.</param>
+		/// <param name="goodsNum">Goods number.</param>
+		/// <param name="errorCode">Error code.</param>
         public bool TradeGoods(BaseUser user, GoodsData goods, int goodsNum, out TradeErrorCode errorCode)
         {
             bool result = false;

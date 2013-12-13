@@ -54,9 +54,9 @@ namespace ZyGames.Framework.Game.Context
             Listener.Start();
         }
 
-        private static void DoCacheDispose(string key, object value, CacheItemRemovedReason reason)
+        private static void DoCacheDispose(string key, object value, CacheRemovedReason reason)
         {
-            if (reason == CacheItemRemovedReason.Expired)
+			if (reason == CacheRemovedReason.Expired)
             {
                 _contextSet.Foreach((ckey, context) =>
                 {
@@ -69,23 +69,36 @@ namespace ZyGames.Framework.Game.Context
             }
         }
 
-        public static GameContext GetInstance(int actionId, int userId, int timeOut = TimeOut)
+        /// <summary>
+        /// 获得当前请求上下文
+        /// </summary>
+        /// <param name="ssid"></param>
+        /// <param name="actionId"></param>
+        /// <param name="userId"></param>
+        /// <param name="timeOut"></param>
+        /// <returns></returns>
+        public static GameContext GetInstance(string ssid, int actionId, int userId, int timeOut = TimeOut)
         {
-            string key = string.Format("{0}_{1}", actionId, userId);
+            if (string.IsNullOrEmpty(ssid))
+            {
+                ssid =  Guid.NewGuid().ToString("N");
+            }
+            string key = CreateContextKey(ssid, actionId);
             if (!_contextSet.ContainsKey(key))
             {
-                _contextSet.Add(key, new GameContext(actionId, userId, timeOut));
+                _contextSet.Add(key, new GameContext(ssid, actionId, userId, timeOut));
             }
             var context = _contextSet[key];
             if (context != null)
             {
+                context.UserId = userId;
                 context.ExpireDate = MathUtils.Now;
             }
             return context;
         }
 
         /// <summary>
-        /// 
+        /// 刷新清空
         /// </summary>
         public static void Refresh()
         {
@@ -93,36 +106,47 @@ namespace ZyGames.Framework.Game.Context
         }
 
         /// <summary>
-        /// 
+        /// 刷新
         /// </summary>
+        /// <param name="ssid"></param>
         /// <param name="actionId"></param>
         /// <param name="userId"></param>
-        public static void Refresh(int actionId, int userId)
+        public static void Refresh(string ssid, int actionId, int userId)
         {
-            string key = string.Format("{0}_{1}", actionId, userId);
+            string key = CreateContextKey(ssid, actionId);
             if (_contextSet.ContainsKey(key))
             {
                 int timeOut = _contextSet[key].LockTimeOut;
-                _contextSet[key] = new GameContext(actionId, userId, timeOut);
+                _contextSet[key] = new GameContext(ssid, actionId, userId, timeOut);
             }
+        }
+
+        private static string CreateContextKey(string ssid, int actionId)
+        {
+            return string.Format("{0}_{1}", ssid, actionId);
         }
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="ssid"></param>
         /// <param name="actionId"></param>
         /// <param name="userId"></param>
         /// <param name="timeOut">超时时间(毫秒)</param>
-        private GameContext(int actionId, int userId, int timeOut)
+        private GameContext(string ssid, int actionId, int userId, int timeOut)
         {
             LockTimeOut = timeOut;
             _monitorLock = new MonitorLockStrategy(timeOut);
+            SessionId = ssid;
             ActionId = actionId;
             UserId = userId;
             IsRequesting = false;
             ExpireDate = MathUtils.Now;
         }
 
+        /// <summary>
+        /// 锁超时时间
+        /// </summary>
         public int LockTimeOut { get; set; }
 
         private DateTime ExpireDate { get; set; }
@@ -137,6 +161,9 @@ namespace ZyGames.Framework.Game.Context
         }
 
         private readonly IMonitorStrategy _monitorLock;
+        /// <summary>
+        /// 获得锁策略
+        /// </summary>
         public IMonitorStrategy MonitorLock
         {
             get { return _monitorLock; }
@@ -145,6 +172,11 @@ namespace ZyGames.Framework.Game.Context
         /// <summary>
         /// 
         /// </summary>
+        public string SessionId { get; set; }
+
+        /// <summary>
+        /// 当前玩家Id
+        /// </summary>
         public int UserId
         {
             get;
@@ -152,7 +184,7 @@ namespace ZyGames.Framework.Game.Context
         }
 
         /// <summary>
-        /// 
+        /// 请求的ActionId
         /// </summary>
         public int ActionId
         {
@@ -161,20 +193,27 @@ namespace ZyGames.Framework.Game.Context
         }
 
         /// <summary>
-        /// 
+        /// 当前玩家对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T GetUser<T>() where T : BaseUser
         {
-            return (T) User;
+            return (T)User;
         }
 
+        /// <summary>
+        /// 当前玩家对象
+        /// </summary>
         public BaseUser User
         {
             get;
             set;
         }
 
+        internal void SetValue(int userId)
+        {
+            UserId = userId;
+        }
     }
 }

@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 using System;
+using ProtoBuf;
 using ZyGames.Framework.Common;
 using ZyGames.Framework.Game.Com.Model;
 
@@ -30,20 +31,38 @@ namespace ZyGames.Framework.Game.Com.Generic
     /// <summary>
     /// 渠道媒体礼包
     /// </summary>
+    [Serializable, ProtoContract]
     public abstract class ChannelGift
     {
         private static readonly object SyncRoot = new object();
+		/// <summary>
+		/// The length of the gift type.
+		/// </summary>
         protected int GiftTypeLength = 3;
+		/// <summary>
+		/// The length of the card no minimum.
+		/// </summary>
         protected int CardNoMinLength = 10;
+		/// <summary>
+		/// The invalid hour.
+		/// </summary>
         protected int InvalidHour = 24;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Com.Generic.ChannelGift"/> class.
+		/// </summary>
         protected ChannelGift()
         {
 
         }
-
+		/// <summary>
+		/// Gets or sets the current card identifier.
+		/// </summary>
+		/// <value>The current card identifier.</value>
         protected abstract int CurrentCardId { get; set; }
-
+		/// <summary>
+		/// Gets the next card identifier.
+		/// </summary>
+		/// <value>The next card identifier.</value>
         protected int NextCardId
         {
             get
@@ -123,7 +142,10 @@ namespace ZyGames.Framework.Game.Com.Generic
                 }
             }
         }
-
+		/// <summary>
+		/// Gets the invalid card.
+		/// </summary>
+		/// <returns>The invalid card.</returns>
         protected abstract GiftNoviceCard[] GetInvalidCard();
         /// <summary>
         /// 获得未激活的卡
@@ -147,7 +169,12 @@ namespace ZyGames.Framework.Game.Com.Generic
             }
             return cardNo;
         }
-
+		/// <summary>
+		/// Adds the gift card.
+		/// </summary>
+		/// <param name="giftType">Gift type.</param>
+		/// <param name="createIp">Create ip.</param>
+		/// <param name="cardNo">Card no.</param>
         protected abstract void AddGiftCard(string giftType, string createIp, string cardNo);
 
         /// <summary>
@@ -169,7 +196,12 @@ namespace ZyGames.Framework.Game.Com.Generic
             }
             return false;
         }
-
+		/// <summary>
+		/// Dos the activate.
+		/// </summary>
+		/// <param name="userId">User identifier.</param>
+		/// <param name="cardNo">Card no.</param>
+		/// <param name="giftType">Gift type.</param>
         protected abstract void DoActivate(int userId, string cardNo, string giftType);
 
         /// <summary>

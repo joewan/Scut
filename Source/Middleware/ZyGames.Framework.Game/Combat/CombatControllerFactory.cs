@@ -33,7 +33,9 @@ namespace ZyGames.Framework.Game.Combat
     {
         private static object lockThis = new object();
         private static ICombatController controller = null;
-
+		/// <summary>
+		/// Create this instance.
+		/// </summary>
         public static ICombatController Create()
         {
             if (controller == null)

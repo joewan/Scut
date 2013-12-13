@@ -24,45 +24,47 @@ THE SOFTWARE.
 using System;
 using System.Text;
 using System.Security.Cryptography;
-using System.Collections;
+using ZyGames.Framework.Game.Configuration;
 using ZyGames.Framework.Game.Sns._91sdk;
-using ZyGames.Framework.Common;
 using ZyGames.Framework.Common.Log;
 using ZyGames.Framework.Common.Serialization;
-using ZyGames.Framework.Game.Sns;
-using ZyGames.Framework.Game.Sns.Section;
 
 namespace ZyGames.Framework.Game.Sns
 {
     /// <summary>
     /// 91SDK 0001
     /// </summary>
-    public class Login91sdk : ILogin
+    public class Login91sdk : AbstractLogin
     {
         private string _retailID = string.Empty;
-        private string _sessionID = string.Empty;
         private string AppId;
         private string AppKey;
         private string Url;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZyGames.Framework.Game.Sns.Login91sdk"/> class.
+		/// </summary>
+		/// <param name="retailID">Retail I.</param>
+		/// <param name="retailUser">Retail user.</param>
+		/// <param name="sessionID">Session I.</param>
         public Login91sdk(string retailID, string retailUser, string sessionID)
         {
             this._retailID = retailID;
-            this._sessionID = sessionID;
+            SessionID = sessionID;
             Uin = retailUser;
-            var sec = SdkSectionFactory.Section91;
-            if (sec != null)
+            GameChannel gameChannel = ZyGameBaseConfigManager.GameSetting.GetChannelSetting(ChannelType.channelMIUI);
+            if (gameChannel != null)
             {
-                var els = sec.Channels[retailID];
-                if (els == null)
+                Url = gameChannel.Url;
+                GameSdkSetting setting = gameChannel.GetSetting(retailID);
+                if (setting != null)
                 {
-                    TraceLog.ReleaseWrite("The sdkChannel section channel91:{0} is null.", retailID);
+                    AppId = setting.AppId;
+                    AppKey = setting.AppKey;
                 }
                 else
                 {
-                    Url = sec.Url;
-                    AppId = els.AppId;
-                    AppKey = els.AppKey;
+                    TraceLog.ReleaseWrite("The sdkChannel section channel91:{0} is null.", retailID);
                 }
             }
             else
@@ -77,44 +79,22 @@ namespace ZyGames.Framework.Game.Sns
             get;
             set;
         }
-
-        public string PassportID
-        {
-            get;
-            set;
-        }
-
-
-        public string Password
-        {
-            get;
-            set;
-        }
-
-        public string UserID
-        {
-            get;
-            set;
-        }
-        public string SessionID
-        {
-            get
-            {
-                return _sessionID;
-            }
-        }
-
-        #region ILogin 成员
-
-        public string GetRegPassport()
+		/// <summary>
+		/// 注册通行证
+		/// </summary>
+		/// <returns></returns>
+        public override string GetRegPassport()
         {
             return this.PassportID;
         }
-
-        public bool CheckLogin()
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+        public override bool CheckLogin()
         {
             int Act = 4;
-            string Sign = string.Format("{0}{1}{2}{3}{4}", AppId, Act, Uin, _sessionID, AppKey);
+            string Sign = string.Format("{0}{1}{2}{3}{4}", AppId, Act, Uin, SessionID, AppKey);
             Sign = HashToMD5Hex(Sign);
 
             string urlData = string.Format("{0}?AppId={1}&Act={2}&Uin={3}&SessionID={4}&Sign={5}",
@@ -149,33 +129,21 @@ namespace ZyGames.Framework.Game.Sns
             //return !string.IsNullOrEmpty(UserID) && UserID != "0";
         }
 
-        #endregion
-
-        /// <summary>
-        /// UTF8编码字符串计算MD5值(十六进制编码字符串)
-        /// </summary>
-        /// <param name="sourceStr">UTF8编码的字符串</param>
-        /// <returns>MD5(十六进制编码字符串)</returns>
-        private static string HashToMD5Hex(string sourceStr)
-        {
-            byte[] bytes = Encoding.UTF8.GetBytes(sourceStr);
-            using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
-            {
-                byte[] result = md5.ComputeHash(bytes);
-                StringBuilder sBuilder = new StringBuilder();
-                for (int i = 0; i < result.Length; i++)
-                {
-                    sBuilder.Append(result[i].ToString("x2"));
-                }
-                return sBuilder.ToString();
-            }
-        }
-
     }
-
+	/// <summary>
+	/// SDK error.
+	/// </summary>
     public class SDKError
     {
+		/// <summary>
+		/// Gets or sets the error code.
+		/// </summary>
+		/// <value>The error code.</value>
         public string ErrorCode { get; set; }
+		/// <summary>
+		/// Gets or sets the error desc.
+		/// </summary>
+		/// <value>The error desc.</value>
         public string ErrorDesc { get; set; }
     }
 }
